@@ -9,10 +9,12 @@
 package org.lateralgm.libmaker.backend;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Random;
+
+import org.lateralgm.libmaker.components.ObservableList.ActiveArrayList;
 
 public class Library
 	{
@@ -73,6 +75,18 @@ public class Library
 		return new Random().nextInt(999000) + 1000;
 		}
 
+	public List<Action> actions = new ActiveArrayList<Action>();
+
+	public enum PLibrary
+		{
+		SOURCE_FILE,FORMAT,CAPTION,ID,AUTHOR,VERSION,CHANGED,INFO,INIT_CODE,ADVANCED
+		}
+
+	private static final EnumMap<PLibrary,Object> DEFS = PropertyMap.makeDefaultMap(PLibrary.class,
+			null,null,null,randomId(),null,100,null,null,null,false);
+
+	public final PropertyMap<PLibrary> properties = new PropertyMap<PLibrary>(PLibrary.class,DEFS);
+
 	public File sourceFile;
 	public Format format;
 	public String caption;
@@ -85,5 +99,4 @@ public class Library
 	//Etc
 	public String initCode;
 	public boolean advanced;
-	public List<Action> actions = new ArrayList<Action>();
 	}

@@ -156,7 +156,7 @@ public class LibReader
 			Action act = new Action();
 			lib.actions.add(act);
 			act.parent = lib;
-			act.name = in.readStr();
+			act.setName(in.readStr());
 			act.id = in.read4();
 
 			byte[] data = new byte[in.read4()];
@@ -240,7 +240,7 @@ public class LibReader
 			lib.actions.add(act);
 			act.parent = lib;
 			act.id = in.read2();
-			act.name = in.readStr1();
+			act.setName(in.readStr1());
 			act.description = in.readStr1();
 			act.list = in.readStr1();
 			act.hint = in.readStr1();

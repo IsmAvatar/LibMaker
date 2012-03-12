@@ -25,10 +25,12 @@ import org.lateralgm.libmaker.Messages;
 import org.lateralgm.libmaker.backend.Action;
 import org.lateralgm.libmaker.backend.Action.Execution;
 import org.lateralgm.libmaker.backend.Action.Kind;
+import org.lateralgm.libmaker.backend.Action.PAction;
 import org.lateralgm.libmaker.components.EnumRenderer;
 import org.lateralgm.libmaker.components.NumberField;
 import org.lateralgm.libmaker.mockui.MockUI.ActionPanel;
 import org.lateralgm.libmaker.mockui.MockUI.GroupPanel;
+import org.lateralgm.libmaker.uilink.PropertyLink.PLFactory;
 
 public class GeneralPane extends GroupPanel implements ActionPanel,ActionListener
 	{
@@ -41,14 +43,26 @@ public class GeneralPane extends GroupPanel implements ActionPanel,ActionListene
 	JButton bImageChange, bExecCode;
 	JLabel lExec, lFunc;
 
+	Action a;
+
+	PLFactory<PAction> plf;
+
 	protected void initKeyComponents()
 		{
+		plf = new PLFactory<PAction>();
+
 		tName = new JTextField();
 		tActId = new NumberField(1,999);
 		tDesc = new JTextField();
 		tList = new JTextField();
 		tHint = new JTextField();
 		tFunction = new JTextField();
+		plf.make(tName,PAction.NAME);
+		plf.make(tActId,PAction.ID);
+		plf.make(tDesc,PAction.DESCRIPTION);
+		plf.make(tList,PAction.LIST);
+		plf.make(tHint,PAction.HINT);
+		plf.make(tFunction,PAction.EXEC_INFO);
 
 		bImageChange = new JButton(Messages.getString("GeneralPane.IMAGE_CHANGE")); //$NON-NLS-1$
 		bImageChange.addActionListener(this);
@@ -68,6 +82,9 @@ public class GeneralPane extends GroupPanel implements ActionPanel,ActionListene
 		cbHidden = new JCheckBox(Messages.getString("GeneralPane.HIDDEN")); //$NON-NLS-1$
 		cbAdvanced = new JCheckBox(Messages.getString("GeneralPane.ADVANCED")); //$NON-NLS-1$
 		cbRegistered = new JCheckBox(Messages.getString("GeneralPane.PRO")); //$NON-NLS-1$
+		plf.make(cbHidden,PAction.HIDDEN);
+		plf.make(cbAdvanced,PAction.ADVANCED);
+		plf.make(cbRegistered,PAction.REGISTERED);
 
 		//These are key components so we can call .setVisible on them.
 		lExec = new JLabel(Messages.getString("GeneralPane.EXECUTION")); //$NON-NLS-1$
@@ -158,17 +175,20 @@ public class GeneralPane extends GroupPanel implements ActionPanel,ActionListene
 	@Override
 	public void setComponents(Action a)
 		{
-		tName.setText(a.name);
+		this.a = a;
+		plf.setMap(a.properties);
+
+		/*tName.setText(a.getName());
 		tActId.setText(Integer.toString(a.id));
 		tDesc.setText(a.description);
 		tList.setText(a.list);
-		tHint.setText(a.hint);
+		tHint.setText(a.hint);*/
 
 		dKind.setSelectedItem(a.kind);
 
-		cbHidden.setSelected(a.hidden);
-		cbAdvanced.setSelected(a.advanced);
-		cbRegistered.setSelected(a.registered);
+		/*		cbHidden.setSelected(a.hidden);
+				cbAdvanced.setSelected(a.advanced);
+				cbRegistered.setSelected(a.registered);*/
 
 		dExec.setSelectedItem(a.execType);
 		if (a.execType == Execution.FUNCTION) tFunction.setText(a.execInfo);

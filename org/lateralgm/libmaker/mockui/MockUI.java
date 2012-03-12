@@ -26,21 +26,26 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.lateralgm.libmaker.Messages;
 import org.lateralgm.libmaker.backend.Action;
 import org.lateralgm.libmaker.backend.Library;
+import org.lateralgm.libmaker.backend.Library.PLibrary;
 import org.lateralgm.libmaker.components.ListListModel;
 import org.lateralgm.libmaker.components.NumberField;
 import org.lateralgm.libmaker.components.SingleListSelectionModel;
+import org.lateralgm.libmaker.uilink.PropertyLink.PLFactory;
 
-public class MockUI extends JSplitPane implements ListSelectionListener
+public class MockUI extends JSplitPane implements ListSelectionListener,ChangeListener
 	{
 	private static final long serialVersionUID = 1L;
 
 	Library lib;
+	//The list is pulled up because we need it to control the other panels
 	ListListModel<Action> mActions;
 	JList lActions;
 	ControlPane control;
@@ -71,11 +76,18 @@ public class MockUI extends JSplitPane implements ListSelectionListener
 		JButton bAdd, bDel, bUp, bDown;
 		JCheckBox cbAdvanced;
 
+		PLFactory<PLibrary> plf;
+
 		protected void initKeyComponents()
 			{
+			plf = new PLFactory<PLibrary>();
+
 			tCaption = new JTextField();
+			plf.make(tCaption,PLibrary.CAPTION);
 			tId = new NumberField(0,1000000);
+			plf.make(tId,PLibrary.ID);
 			cbAdvanced = new JCheckBox(Messages.getString("MockUI.ADVANCED")); //$NON-NLS-1$
+			plf.make(cbAdvanced,PLibrary.ADVANCED);
 
 			lActions = new JList(mActions = new ListListModel<Action>());
 			lActions.setCellRenderer(new DefaultListCellRenderer()
@@ -85,7 +97,7 @@ public class MockUI extends JSplitPane implements ListSelectionListener
 					public Component getListCellRendererComponent(JList list, Object value, int index,
 							boolean isSelected, boolean cellHasFocus)
 						{
-						if (value instanceof Action) value = ((Action) value).name;
+						if (value instanceof Action) value = ((Action) value).getName();
 						return super.getListCellRendererComponent(list,value,index,isSelected,cellHasFocus);
 						}
 				});
@@ -159,9 +171,10 @@ public class MockUI extends JSplitPane implements ListSelectionListener
 
 		public void setComponents(Library lib)
 			{
-			tCaption.setText(lib.caption);
-			tId.setValue(lib.id);
-			cbAdvanced.setSelected(lib.advanced);
+			plf.setMap(lib.properties);
+			//			tCaption.setText(lib.caption);
+			//			tId.setValue(lib.id);
+			//			cbAdvanced.setSelected(lib.advanced);
 			}
 
 		@Override
@@ -179,6 +192,7 @@ public class MockUI extends JSplitPane implements ListSelectionListener
 				Action a = new Action();
 				lib.actions.add(a);
 				lActions.setSelectedValue(a,true);
+				a.addChangeListener(MockUI.this);
 				}
 			if (s == bDel)
 				{
@@ -235,6 +249,8 @@ public class MockUI extends JSplitPane implements ListSelectionListener
 		control.setComponents(lib);
 		mActions.setList(lib.actions);
 		lActions.setSelectedIndex(lib.actions.isEmpty() ? -1 : 0);
+		for (Action a : lib.actions)
+			a.addChangeListener(this);
 		lActions.updateUI();
 		}
 
@@ -289,5 +305,11 @@ public class MockUI extends JSplitPane implements ListSelectionListener
 		Action a = (Action) v;
 		general.setComponents(a);
 		iface.setComponents(a);
+		}
+
+	@Override
+	public void stateChanged(ChangeEvent e)
+		{
+		lActions.updateUI();
 		}
 	}

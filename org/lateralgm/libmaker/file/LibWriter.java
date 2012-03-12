@@ -73,7 +73,7 @@ public class LibWriter
 		for (Action act : lib.actions)
 			{
 			out.write4(ver);
-			out.writeStr(act.name);
+			out.writeStr(act.getName());
 			out.write4(act.id);
 
 			ImageIO.write(act.image,"bmp",out); //write image data //$NON-NLS-1$
@@ -138,7 +138,7 @@ public class LibWriter
 			{
 			out.write4(VER);
 			out.write2(act.id);
-			out.writeStr1(act.name);
+			out.writeStr1(act.getName());
 			out.writeStr1(act.description);
 			out.writeStr1(act.list);
 			out.writeStr1(act.hint);
