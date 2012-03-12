@@ -5,3 +5,8 @@ Written in Java as an alternative to YoYo Games'
 Library Maker, this project hopes to address many
 of its shortcomings by being cross-platform, developer-
 AND community-supported, feedback-driven, and open source.
+
+This project is licensed under the GNU GPL 3+.
+Many components can be relicensed to a less
+restrictive license (e.g. MIT) PER REQUEST.
+The project as a whole, however, is locked into GPL.
