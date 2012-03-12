@@ -53,6 +53,7 @@ public class LibMaker extends JFrame implements ActionListener
 	public LibMaker()
 		{
 		super(); //Title gets set when library is set
+		setIconImage(Messages.getIconForKey("LibMaker.FRAME_ICON").getImage());
 		ui = new MockUI();
 		fc = new FileChooser(this);
 
