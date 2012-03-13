@@ -154,10 +154,13 @@ public interface ObservableList<K> extends List<K>
 			return e;
 			}
 
+		/**
+		 * Note that changes to the returned sublist may not trigger an update.<p>
+		 * {@inheritDoc}
+		 */
 		@Override
 		public List<E> subList(int fromIndex, int toIndex)
 			{
-			// FIXME Sub list's 'set' method needs overriding
 			return super.subList(fromIndex,toIndex);
 			}
 
