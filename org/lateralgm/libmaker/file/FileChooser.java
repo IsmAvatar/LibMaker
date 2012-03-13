@@ -182,7 +182,9 @@ public class FileChooser
 			lgl.addActionListener(this);
 			lib.addActionListener(this);
 			lib520 = new JRadioButton(Messages.getString("Accessory.LIB520"),true); //$NON-NLS-1$
-			lib500 = new JRadioButton(Messages.getString("Accessory.LIB500"),true); //$NON-NLS-1$
+			lib500 = new JRadioButton(Messages.getString("Accessory.LIB500")); //$NON-NLS-1$
+			lib520.setEnabled(false);
+			lib500.setEnabled(false);
 			bg = new ButtonGroup();
 			bg.add(lib520);
 			bg.add(lib500);
