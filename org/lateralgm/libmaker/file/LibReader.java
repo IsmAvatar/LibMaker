@@ -169,10 +169,8 @@ public class LibReader
 			if (ver == 520) in.readBool(act.properties,PAction.REGISTERED);
 			in.readStr(act.properties,PAction.DESCRIPTION,PAction.LIST,PAction.HINT);
 			act.put(PAction.KIND,ACT_KINDS[in.read4()]);
-			act.ifaceKind = IFACE_KINDS[in.read4()];
-			act.question = in.readBool();
-			act.apply = in.readBool();
-			act.relative = in.readBool();
+			act.put(PAction.IFACE_KIND,IFACE_KINDS[in.read4()]);
+			in.readBool(act.properties,PAction.QUESTION,PAction.APPLY,PAction.RELATIVE);
 			act.argNum = in.read4();
 			int args = in.read4();
 			for (int k = 0; k < args; k++)
@@ -288,7 +286,7 @@ public class LibReader
 			act.put(PAction.EXEC_INFO,in.readStr());
 			tags = in.read();
 			act.put(PAction.KIND,ACT_KINDS[tags >> 4]);
-			act.ifaceKind = IFACE_KINDS[tags & 15];
+			act.put(PAction.IFACE_KIND,IFACE_KINDS[tags & 15]);
 			act.argNum = in.read();
 			for (int k = 0; k < act.argNum; k++)
 				{

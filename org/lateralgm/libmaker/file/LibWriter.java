@@ -86,10 +86,8 @@ public class LibWriter
 			if (ver == 520) out.writeBool(act.properties,PAction.REGISTERED);
 			out.writeStr(act.properties,PAction.DESCRIPTION,PAction.LIST,PAction.HINT);
 			out.write4(ACT_KINDS.get(act.get(PAction.KIND)));
-			out.write4(IFACE_KINDS.get(act.ifaceKind));
-			out.writeBool(act.question);
-			out.writeBool(act.apply);
-			out.writeBool(act.relative);
+			out.write4(IFACE_KINDS.get(act.get(PAction.IFACE_KIND)));
+			out.writeBool(act.properties,PAction.QUESTION,PAction.APPLY,PAction.RELATIVE);
 			out.write4(act.argNum);
 			out.write4(8); //8 vs act.argNum vs MAX_ARGS?
 
@@ -179,7 +177,6 @@ public class LibWriter
 		for (Action act : lib.actions)
 			{
 			out.write4(VER);
-			
 
 			s = new Size[] { Size.I2,Size.S1,Size.S1,Size.S1,Size.S1 };
 			PAction[] pa = { PAction.ID,PAction.NAME,PAction.DESCRIPTION,PAction.LIST,PAction.HINT };
@@ -196,7 +193,7 @@ public class LibWriter
 			out.writeStr(act.properties,PAction.EXEC_INFO);
 
 			int kind = ACT_KINDS.get(act.get(PAction.KIND)) << 4;
-			kind |= IFACE_KINDS.get(act.ifaceKind);
+			kind |= IFACE_KINDS.get(act.get(PAction.IFACE_KIND));
 			out.write(kind);
 
 			out.write(act.argNum);

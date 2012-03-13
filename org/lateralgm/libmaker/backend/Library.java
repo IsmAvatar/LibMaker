@@ -82,7 +82,7 @@ public class Library
 		}
 
 	private static final EnumMap<PLibrary,Object> DEFS = PropertyMap.makeDefaultMap(PLibrary.class,
-			null,null,null,randomId(),null,100,null,null,null,false);
+			null,randomId(),null,100,null,null,null,false);
 
 	public final PropertyMap<PLibrary> properties = new PropertyMap<PLibrary>(PLibrary.class,DEFS);
 

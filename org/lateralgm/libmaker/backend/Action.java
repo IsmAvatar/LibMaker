@@ -38,38 +38,24 @@ public class Action
 
 	public enum PAction
 		{
-		PARENT,NAME,ID,IMAGE,HIDDEN,ADVANCED,REGISTERED,DESCRIPTION,LIST,HINT,KIND,EXEC_TYPE,EXEC_INFO,
+		NAME,ID,IMAGE,HIDDEN,ADVANCED,REGISTERED,DESCRIPTION,LIST,HINT,KIND,EXEC_TYPE,EXEC_INFO,
 		IFACE_KIND,QUESTION,APPLY,RELATIVE,ARG_NUM
 		}
 
 	private static final EnumMap<PAction,Object> DEFS = PropertyMap.makeDefaultMap(PAction.class,
-			null,null,null,null,false,false,false,null,null,null,Kind.NORMAL,Execution.CODE,null,
+			null,null,null,false,false,false,null,null,null,Kind.NORMAL,Execution.CODE,null,
 			InterfaceKind.NORMAL,false,true,true,null);
 
 	public final PropertyMap<PAction> properties = new PropertyMap<PAction>(PAction.class,DEFS);
 
 	//Fields
 	public Library parent;
-	//General Fields
-	/*	protected String name;
-		public int id;
-		public BufferedImage image;
-		public boolean hidden, advanced, registered;
-		public String description, list, hint;
-		public Kind kind = Kind.NORMAL;
-		public Execution execType = Execution.CODE;
-		public String execInfo;*/
-	//Interface Fields
-	public InterfaceKind ifaceKind = InterfaceKind.NORMAL;
-	public boolean question, apply = true, relative = true;
 	public int argNum;
 	/** .length is always MAX_ARGS. Use argNum to determine actual used argument count. */
 	public Argument arguments[] = new Argument[MAX_ARGS];
 
 	public Action()
 		{
-		//		id = lastId++;
-		//		name = "Action " + id;
 		int id = lastId++;
 		properties.put(PAction.ID,id);
 		properties.put(PAction.NAME,"Action " + id);

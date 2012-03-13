@@ -27,10 +27,12 @@ import javax.swing.event.ChangeListener;
 import org.lateralgm.libmaker.Messages;
 import org.lateralgm.libmaker.backend.Action;
 import org.lateralgm.libmaker.backend.Action.InterfaceKind;
+import org.lateralgm.libmaker.backend.Action.PAction;
 import org.lateralgm.libmaker.backend.Argument;
 import org.lateralgm.libmaker.components.EnumRenderer;
 import org.lateralgm.libmaker.mockui.MockUI.ActionPanel;
 import org.lateralgm.libmaker.mockui.MockUI.GroupPanel;
+import org.lateralgm.libmaker.uilink.PropertyLink.PLFactory;
 
 public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListener
 	{
@@ -45,14 +47,21 @@ public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListe
 	JTextField tArgVals[];
 	JTextField tArgOpts[];
 
+	PLFactory<PAction> plf;
+
 	protected void initKeyComponents()
 		{
+		plf = new PLFactory<PAction>();
+
 		dKind = new JComboBox(InterfaceKind.values());
 		dKind.setRenderer(new EnumRenderer("ActionIfaceKind.")); //$NON-NLS-1$
 
 		cbQuestion = new JCheckBox(Messages.getString("InterfacePane.QUESTION")); //$NON-NLS-1$
 		cbApply = new JCheckBox(Messages.getString("InterfacePane.APPLY")); //$NON-NLS-1$
 		cbRelative = new JCheckBox(Messages.getString("InterfacePane.RELATIVE")); //$NON-NLS-1$
+		plf.make(cbQuestion,PAction.QUESTION);
+		plf.make(cbApply,PAction.APPLY);
+		plf.make(cbRelative,PAction.RELATIVE);
 
 		smArgNum = new SpinnerNumberModel(6,0,Action.MAX_ARGS,1); //so all 6 arguments are initially visible
 		smArgNum.addChangeListener(this);
@@ -162,10 +171,8 @@ public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListe
 	@Override
 	public void setComponents(Action a)
 		{
-		dKind.setSelectedItem(a.ifaceKind);
-		cbQuestion.setSelected(a.question);
-		cbApply.setSelected(a.apply);
-		cbRelative.setSelected(a.relative);
+		plf.setMap(a.properties);
+		dKind.setSelectedItem(a.get(PAction.IFACE_KIND));
 
 		smArgNum.setValue(a.argNum);
 		for (int arg = 0; arg < Action.MAX_ARGS; arg++)
