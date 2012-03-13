@@ -184,14 +184,14 @@ public class GeneralPane extends GroupPanel implements ActionPanel,ActionListene
 		tList.setText(a.list);
 		tHint.setText(a.hint);*/
 
-		dKind.setSelectedItem(a.kind);
+		dKind.setSelectedItem(a.get(PAction.KIND));
 
 		/*		cbHidden.setSelected(a.hidden);
 				cbAdvanced.setSelected(a.advanced);
 				cbRegistered.setSelected(a.registered);*/
 
-		dExec.setSelectedItem(a.execType);
-		if (a.execType == Execution.FUNCTION) tFunction.setText(a.execInfo);
+		dExec.setSelectedItem(a.get(PAction.EXEC_TYPE));
+//		if (a.execType == Execution.FUNCTION) tFunction.setText(a.execInfo);
 		}
 
 	@Override

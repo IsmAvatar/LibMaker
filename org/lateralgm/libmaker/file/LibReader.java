@@ -24,6 +24,7 @@ import org.lateralgm.libmaker.Messages;
 import org.lateralgm.libmaker.backend.Action;
 import org.lateralgm.libmaker.backend.Action.Execution;
 import org.lateralgm.libmaker.backend.Action.InterfaceKind;
+import org.lateralgm.libmaker.backend.Action.PAction;
 import org.lateralgm.libmaker.backend.Argument;
 import org.lateralgm.libmaker.backend.Library;
 import org.lateralgm.libmaker.backend.Library.PLibrary;
@@ -157,20 +158,17 @@ public class LibReader
 			Action act = new Action();
 			lib.actions.add(act);
 			act.parent = lib;
-			act.setName(in.readStr());
-			act.id = in.read4();
+			in.readStr(act.properties,PAction.NAME);
+			in.read4(act.properties,PAction.ID);
 
 			byte[] data = new byte[in.read4()];
 			in.read(data);
-			act.image = ImageIO.read(new ByteArrayInputStream(data));
+			act.put(PAction.IMAGE,ImageIO.read(new ByteArrayInputStream(data)));
 
-			act.hidden = in.readBool();
-			act.advanced = in.readBool();
-			if (ver == 520) act.registered = in.readBool();
-			act.description = in.readStr();
-			act.list = in.readStr();
-			act.hint = in.readStr();
-			act.kind = ACT_KINDS[in.read4()];
+			in.readBool(act.properties,PAction.HIDDEN,PAction.ADVANCED);
+			if (ver == 520) in.readBool(act.properties,PAction.REGISTERED);
+			in.readStr(act.properties,PAction.DESCRIPTION,PAction.LIST,PAction.HINT);
+			act.put(PAction.KIND,ACT_KINDS[in.read4()]);
 			act.ifaceKind = IFACE_KINDS[in.read4()];
 			act.question = in.readBool();
 			act.apply = in.readBool();
@@ -195,13 +193,14 @@ public class LibReader
 					in.skip(in.read4());
 					}
 				}
-			act.execType = EXECUTIONS[in.read4()];
-			if (act.execType == Action.Execution.FUNCTION)
-				act.execInfo = in.readStr();
+			Execution execType = EXECUTIONS[in.read4()];
+			act.put(PAction.EXEC_TYPE,execType);
+			if (execType == Action.Execution.FUNCTION)
+				in.readStr(act.properties,PAction.EXEC_INFO);
 			else
 				in.skip(in.read4());
-			if (act.execType == Action.Execution.CODE)
-				act.execInfo = in.readStr();
+			if (execType == Action.Execution.CODE)
+				in.readStr(act.properties,PAction.EXEC_INFO);
 			else
 				in.skip(in.read4());
 			}
@@ -259,8 +258,8 @@ public class LibReader
 		Library lib = new Library();
 
 		Size s[] = { Size.I3,Size.S1,Size.S1,Size.I4 };
-		PLibrary p[] = { PLibrary.ID,PLibrary.CAPTION,PLibrary.AUTHOR,PLibrary.VERSION };
-		read(in,s,lib.properties,p);
+		PLibrary pl[] = { PLibrary.ID,PLibrary.CAPTION,PLibrary.AUTHOR,PLibrary.VERSION };
+		read(in,s,lib.properties,pl);
 		in.skip(8); //lib.changed
 		in.readStr(lib.properties,PLibrary.INFO,PLibrary.INIT_CODE);
 		int acts = in.read();
@@ -273,23 +272,22 @@ public class LibReader
 			Action act = new Action();
 			lib.actions.add(act);
 			act.parent = lib;
-			
-			act.id = in.read2();
-			act.setName(in.readStr1());
-			act.description = in.readStr1();
-			act.list = in.readStr1();
-			act.hint = in.readStr1();
+
+			s = new Size[] { Size.I2,Size.S1,Size.S1,Size.S1,Size.S1 };
+			PAction[] pa = { PAction.ID,PAction.NAME,PAction.DESCRIPTION,PAction.LIST,PAction.HINT };
+			read(in,s,act.properties,pa);
+
 			int tags = in.read();
-			act.hidden = mask(tags,128);
-			act.advanced = mask(tags,64);
-			act.registered = mask(tags,32);
-			act.question = mask(tags,16);
-			act.apply = mask(tags,8);
-			act.relative = mask(tags,4);
-			act.execType = EXECUTIONS[tags & 3];
-			act.execInfo = in.readStr();
+			act.put(PAction.HIDDEN,mask(tags,128));
+			act.put(PAction.ADVANCED,mask(tags,64));
+			act.put(PAction.REGISTERED,mask(tags,32));
+			act.put(PAction.QUESTION,mask(tags,16));
+			act.put(PAction.APPLY,mask(tags,8));
+			act.put(PAction.RELATIVE,mask(tags,4));
+			act.put(PAction.EXEC_TYPE,EXECUTIONS[tags & 3]);
+			act.put(PAction.EXEC_INFO,in.readStr());
 			tags = in.read();
-			act.kind = ACT_KINDS[tags >> 4];
+			act.put(PAction.KIND,ACT_KINDS[tags >> 4]);
 			act.ifaceKind = IFACE_KINDS[tags & 15];
 			act.argNum = in.read();
 			for (int k = 0; k < act.argNum; k++)
@@ -312,10 +310,10 @@ public class LibReader
 		int cc = icons.getWidth() / 24;
 		for (Action a : lib.actions)
 			{
-			if (a.kind != Action.Kind.PLACEHOLDER && a.kind != Action.Kind.SEPARATOR
-					&& a.kind != Action.Kind.LABEL)
+			Action.Kind k = a.get(PAction.KIND);
+			if (k != Action.Kind.PLACEHOLDER && k != Action.Kind.SEPARATOR && k != Action.Kind.LABEL)
 				{
-				a.image = icons.getSubimage(24 * (i % cc),24 * (i / cc),24,24);
+				a.put(PAction.IMAGE,icons.getSubimage(24 * (i % cc),24 * (i / cc),24,24));
 				i++;
 				}
 			}

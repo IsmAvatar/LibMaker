@@ -20,6 +20,8 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import org.lateralgm.libmaker.backend.Action;
+import org.lateralgm.libmaker.backend.Action.Execution;
+import org.lateralgm.libmaker.backend.Action.PAction;
 import org.lateralgm.libmaker.backend.Argument;
 import org.lateralgm.libmaker.backend.Library;
 import org.lateralgm.libmaker.backend.Library.PLibrary;
@@ -74,18 +76,16 @@ public class LibWriter
 		for (Action act : lib.actions)
 			{
 			out.write4(ver);
-			out.writeStr(act.getName());
-			out.write4(act.id);
+			out.writeStr(act.properties,PAction.NAME);
+			out.write4(act.properties,PAction.ID);
 
-			ImageIO.write(act.image,"bmp",out); //write image data //$NON-NLS-1$
+			BufferedImage img = act.get(PAction.IMAGE);
+			ImageIO.write(img,"bmp",out); //write image data //$NON-NLS-1$
 
-			out.writeBool(act.hidden);
-			out.writeBool(act.advanced);
-			if (ver == 520) out.writeBool(act.registered);
-			out.writeStr(act.description);
-			out.writeStr(act.list);
-			out.writeStr(act.hint);
-			out.write4(ACT_KINDS.get(act.kind));
+			out.writeBool(act.properties,PAction.HIDDEN,PAction.ADVANCED);
+			if (ver == 520) out.writeBool(act.properties,PAction.REGISTERED);
+			out.writeStr(act.properties,PAction.DESCRIPTION,PAction.LIST,PAction.HINT);
+			out.write4(ACT_KINDS.get(act.get(PAction.KIND)));
 			out.write4(IFACE_KINDS.get(act.ifaceKind));
 			out.writeBool(act.question);
 			out.writeBool(act.apply);
@@ -110,9 +110,11 @@ public class LibWriter
 				out.writeStr(STR_EMPTY);
 				}
 
-			out.write4(EXECUTIONS.get(act.execType));
-			out.writeStr(act.execType == Action.Execution.FUNCTION ? act.execInfo : STR_EMPTY);
-			out.writeStr(act.execType == Action.Execution.CODE ? act.execInfo : STR_EMPTY);
+			Execution execType = act.get(PAction.EXEC_TYPE);
+			String execInfo = act.get(PAction.EXEC_INFO);
+			out.write4(EXECUTIONS.get(execType));
+			out.writeStr(execType == Action.Execution.FUNCTION ? execInfo : STR_EMPTY);
+			out.writeStr(execType == Action.Execution.CODE ? execInfo : STR_EMPTY);
 			}
 		}
 
@@ -166,8 +168,8 @@ public class LibWriter
 		out.write2(VER);
 
 		Size s[] = { Size.I3,Size.S1,Size.S1,Size.I4 };
-		PLibrary p[] = { PLibrary.ID,PLibrary.CAPTION,PLibrary.AUTHOR,PLibrary.VERSION };
-		write(out,s,lib.properties,p);
+		PLibrary pl[] = { PLibrary.ID,PLibrary.CAPTION,PLibrary.AUTHOR,PLibrary.VERSION };
+		write(out,s,lib.properties,pl);
 		out.writeD(0); //lib.changed
 		out.writeStr(lib.properties,PLibrary.INFO,PLibrary.INIT_CODE);
 		int acts = lib.get(PLibrary.ADVANCED) ? 128 : 0;
@@ -177,22 +179,23 @@ public class LibWriter
 		for (Action act : lib.actions)
 			{
 			out.write4(VER);
-			out.write2(act.id);
-			out.writeStr1(act.getName());
-			out.writeStr1(act.description);
-			out.writeStr1(act.list);
-			out.writeStr1(act.hint);
-			int mask = act.hidden ? 128 : 0;
-			mask |= act.advanced ? 64 : 0;
-			mask |= act.registered ? 32 : 0;
-			mask |= act.question ? 16 : 0;
-			mask |= act.apply ? 8 : 0;
-			mask |= act.relative ? 4 : 0;
-			mask |= EXECUTIONS.get(act.execType); //(0-2)
-			out.write(mask);
-			out.writeStr(act.execInfo);
+			
 
-			int kind = ACT_KINDS.get(act.kind) << 4;
+			s = new Size[] { Size.I2,Size.S1,Size.S1,Size.S1,Size.S1 };
+			PAction[] pa = { PAction.ID,PAction.NAME,PAction.DESCRIPTION,PAction.LIST,PAction.HINT };
+			write(out,s,act.properties,pa);
+
+			int mask = act.get(PAction.HIDDEN) ? 128 : 0;
+			mask |= act.get(PAction.ADVANCED) ? 64 : 0;
+			mask |= act.get(PAction.REGISTERED) ? 32 : 0;
+			mask |= act.get(PAction.QUESTION) ? 16 : 0;
+			mask |= act.get(PAction.APPLY) ? 8 : 0;
+			mask |= act.get(PAction.RELATIVE) ? 4 : 0;
+			mask |= EXECUTIONS.get(act.get(PAction.EXEC_TYPE)); //(0-2)
+			out.write(mask);
+			out.writeStr(act.properties,PAction.EXEC_INFO);
+
+			int kind = ACT_KINDS.get(act.get(PAction.KIND)) << 4;
 			kind |= IFACE_KINDS.get(act.ifaceKind);
 			out.write(kind);
 
@@ -215,8 +218,11 @@ public class LibWriter
 		//Oh god this hack
 		int actNum = 0;
 		for (Action a : lib.actions)
-			if (a.kind != Action.Kind.PLACEHOLDER && a.kind != Action.Kind.SEPARATOR
-					&& a.kind != Action.Kind.LABEL) actNum++;
+			{
+			Action.Kind k = a.get(PAction.KIND);
+			if (k != Action.Kind.PLACEHOLDER && k != Action.Kind.SEPARATOR && k != Action.Kind.LABEL)
+				actNum++;
+			}
 
 		if (actNum == 0) //seriously, who does that?
 			{
@@ -233,10 +239,11 @@ public class LibWriter
 		int i = 0;
 		for (Action a : lib.actions)
 			{
-			if (a.kind != Action.Kind.PLACEHOLDER && a.kind != Action.Kind.SEPARATOR
-					&& a.kind != Action.Kind.LABEL)
+			Action.Kind k = a.get(PAction.KIND);
+			if (k != Action.Kind.PLACEHOLDER && k != Action.Kind.SEPARATOR && k != Action.Kind.LABEL)
 				{
-				g.drawImage(a.image,24 * (i % columns),24 * (i / columns),(ImageObserver) null);
+				BufferedImage img = a.get(PAction.IMAGE);
+				g.drawImage(img,24 * (i % columns),24 * (i / columns),(ImageObserver) null);
 				i++;
 				}
 			}

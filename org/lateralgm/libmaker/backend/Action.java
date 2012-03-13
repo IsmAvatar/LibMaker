@@ -8,7 +8,6 @@
 
 package org.lateralgm.libmaker.backend;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -52,14 +51,14 @@ public class Action
 	//Fields
 	public Library parent;
 	//General Fields
-	protected String name;
-	public int id;
-	public BufferedImage image;
-	public boolean hidden, advanced, registered;
-	public String description, list, hint;
-	public Kind kind = Kind.NORMAL;
-	public Execution execType = Execution.CODE;
-	public String execInfo;
+	/*	protected String name;
+		public int id;
+		public BufferedImage image;
+		public boolean hidden, advanced, registered;
+		public String description, list, hint;
+		public Kind kind = Kind.NORMAL;
+		public Execution execType = Execution.CODE;
+		public String execInfo;*/
 	//Interface Fields
 	public InterfaceKind ifaceKind = InterfaceKind.NORMAL;
 	public boolean question, apply = true, relative = true;
@@ -69,15 +68,27 @@ public class Action
 
 	public Action()
 		{
-		id = lastId++;
-		name = "Action " + id;
+		//		id = lastId++;
+		//		name = "Action " + id;
+		int id = lastId++;
 		properties.put(PAction.ID,id);
-		properties.put(PAction.NAME,name);
+		properties.put(PAction.NAME,"Action " + id);
 
 		for (int arg = 0; arg < MAX_ARGS; arg++)
 			arguments[arg] = new Argument(arg);
 		}
 
+	public void put(PAction key, Object value)
+		{
+		properties.put(key,value);
+		}
+
+	public <V>V get(PAction key)
+		{
+		return properties.get(key);
+		}
+
+	//XXX: We're keeping this just until PropertyMap has Listener
 	List<ChangeListener> listeners = new ArrayList<ChangeListener>();
 
 	public void addChangeListener(ChangeListener l)
@@ -87,15 +98,10 @@ public class Action
 
 	public void setName(String name)
 		{
-		this.name = name;
+		put(PAction.NAME,name);
 
 		ChangeEvent evt = new ChangeEvent(this);
 		for (ChangeListener l : listeners)
 			l.stateChanged(evt);
-		}
-
-	public String getName()
-		{
-		return name;
 		}
 	}

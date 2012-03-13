@@ -33,6 +33,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.lateralgm.libmaker.Messages;
 import org.lateralgm.libmaker.backend.Action;
+import org.lateralgm.libmaker.backend.Action.PAction;
 import org.lateralgm.libmaker.backend.Library;
 import org.lateralgm.libmaker.backend.Library.PLibrary;
 import org.lateralgm.libmaker.components.ListListModel;
@@ -97,7 +98,7 @@ public class MockUI extends JSplitPane implements ListSelectionListener,ChangeLi
 					public Component getListCellRendererComponent(JList list, Object value, int index,
 							boolean isSelected, boolean cellHasFocus)
 						{
-						if (value instanceof Action) value = ((Action) value).getName();
+						if (value instanceof Action) value = ((Action) value).get(PAction.NAME);
 						return super.getListCellRendererComponent(list,value,index,isSelected,cellHasFocus);
 						}
 				});
