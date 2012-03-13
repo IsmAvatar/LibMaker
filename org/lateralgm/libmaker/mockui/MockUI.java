@@ -2,8 +2,19 @@
  * Copyright (C) 2012 IsmAvatar <IsmAvatar@gmail.com>
  * 
  * This file is part of LibMaker.
- * LibMaker is free software and comes with ABSOLUTELY NO WARRANTY.
- * See LICENSE for details.
+ * 
+ * LibMaker is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * LibMaker is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License (COPYING) for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.lateralgm.libmaker.mockui;
@@ -102,6 +113,8 @@ public class MockUI extends JSplitPane implements ListSelectionListener,ChangeLi
 						return super.getListCellRendererComponent(list,value,index,isSelected,cellHasFocus);
 						}
 				});
+			//Prototype only used for size calculation, so it doesn't need translating
+			lActions.setPrototypeCellValue("Sample Action Cell"); //$NON-NLS-1$
 			lActions.setSelectionModel(new SingleListSelectionModel());
 			lActions.addListSelectionListener(MockUI.this);
 
@@ -160,7 +173,6 @@ public class MockUI extends JSplitPane implements ListSelectionListener,ChangeLi
 			/**/.addGroup(layout.createParallelGroup()
 			/*	*/.addComponent(tId,PREF,DEF,PREF)
 			/*	*/.addComponent(bCycle,16,16,16))
-			//			/**/.addComponent(tId,PREF,DEF,PREF)
 			/**/.addComponent(bInfo)
 			/**/.addComponent(bCode)
 			/**/.addComponent(cbAdvanced)
@@ -173,9 +185,6 @@ public class MockUI extends JSplitPane implements ListSelectionListener,ChangeLi
 		public void setComponents(Library lib)
 			{
 			plf.setMap(lib.properties);
-			//			tCaption.setText(lib.caption);
-			//			tId.setValue(lib.id);
-			//			cbAdvanced.setSelected(lib.advanced);
 			}
 
 		@Override

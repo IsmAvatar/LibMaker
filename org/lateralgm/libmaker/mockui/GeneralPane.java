@@ -11,14 +11,15 @@ package org.lateralgm.libmaker.mockui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.lateralgm.libmaker.Messages;
@@ -41,7 +42,7 @@ public class GeneralPane extends GroupPanel implements ActionPanel,ActionListene
 	JComboBox dKind, dExec;
 	JCheckBox cbHidden, cbAdvanced, cbRegistered;
 	JButton bImageChange, bExecCode;
-	JLabel lExec, lFunc;
+	JLabel imagePreview, lExec, lFunc;
 
 	Action a;
 
@@ -63,6 +64,11 @@ public class GeneralPane extends GroupPanel implements ActionPanel,ActionListene
 		plf.make(tList,PAction.LIST);
 		plf.make(tHint,PAction.HINT);
 		plf.make(tFunction,PAction.EXEC_INFO);
+
+		imagePreview = new JLabel();
+		imagePreview.setVerticalAlignment(JLabel.TOP);
+		imagePreview.setBorder(BorderFactory.createLoweredBevelBorder());
+		imagePreview.setPreferredSize(new Dimension(32,32));
 
 		bImageChange = new JButton(Messages.getString("GeneralPane.IMAGE_CHANGE")); //$NON-NLS-1$
 		bImageChange.addActionListener(this);
@@ -105,10 +111,6 @@ public class GeneralPane extends GroupPanel implements ActionPanel,ActionListene
 		JLabel lDesc = new JLabel(Messages.getString("GeneralPane.DESCRIPTION")); //$NON-NLS-1$
 		JLabel lList = new JLabel(Messages.getString("GeneralPane.LIST")); //$NON-NLS-1$
 		JLabel lHint = new JLabel(Messages.getString("GeneralPane.HINT")); //$NON-NLS-1$
-
-		JPanel imagePreview = new JPanel();
-		imagePreview.setBorder(BorderFactory.createLoweredBevelBorder());
-		imagePreview.setPreferredSize(new Dimension(32,32));
 
 		int PREF = GroupLayout.PREFERRED_SIZE, DEF = GroupLayout.DEFAULT_SIZE;
 
@@ -179,21 +181,8 @@ public class GeneralPane extends GroupPanel implements ActionPanel,ActionListene
 		{
 		this.a = a;
 		plf.setMap(a.properties);
-
-		/*tName.setText(a.getName());
-		tActId.setText(Integer.toString(a.id));
-		tDesc.setText(a.description);
-		tList.setText(a.list);
-		tHint.setText(a.hint);*/
-
-		//		dKind.setSelectedItem(a.get(PAction.KIND));
-
-		/*		cbHidden.setSelected(a.hidden);
-				cbAdvanced.setSelected(a.advanced);
-				cbRegistered.setSelected(a.registered);*/
-
-		//		dExec.setSelectedItem(a.get(PAction.EXEC_TYPE));
-		//		if (a.execType == Execution.FUNCTION) tFunction.setText(a.execInfo);
+		BufferedImage img = a.get(PAction.IMAGE);
+		imagePreview.setIcon(img == null ? null : new ImageIcon(img));
 		}
 
 	@Override
