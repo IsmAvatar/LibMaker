@@ -44,7 +44,7 @@ public class LibWriter
 		EnumMap<Action.InterfaceKind,Integer> m2 = new EnumMap<Action.InterfaceKind,Integer>(
 				Action.InterfaceKind.class);
 		for (int i = 0; i < LibReader.IFACE_KINDS.length; i++)
-			m2.put(LibReader.IFACE_KINDS[i],i);
+			if (LibReader.IFACE_KINDS[i] != null) m2.put(LibReader.IFACE_KINDS[i],i);
 		IFACE_KINDS = Collections.unmodifiableMap(m2);
 
 		EnumMap<Action.Execution,Integer> m3 = new EnumMap<Action.Execution,Integer>(
@@ -172,11 +172,11 @@ public class LibWriter
 		out.writeStr(lib.properties,PLibrary.INFO,PLibrary.INIT_CODE);
 		int acts = lib.get(PLibrary.ADVANCED) ? 128 : 0;
 		acts |= lib.actions.size();
-		out.write4(acts);
+		out.write(acts);
 
 		for (Action act : lib.actions)
 			{
-			out.write4(VER);
+			out.write2(VER);
 
 			s = new Size[] { Size.I2,Size.S1,Size.S1,Size.S1,Size.S1 };
 			PAction[] pa = { PAction.ID,PAction.NAME,PAction.DESCRIPTION,PAction.LIST,PAction.HINT };
