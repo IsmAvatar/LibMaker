@@ -29,6 +29,7 @@ public class GmMenu extends JMenu
 		{
 		super();
 		setTextAndAlt(this,s);
+		this.listener = listener;
 		}
 
 	public JMenuItem addItem(String key)

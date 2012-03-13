@@ -58,7 +58,9 @@ public class FileChooser
 		this.parent = parent;
 		String[] exts = { LglFormat.EXTENSION,LibFormat.EXTENSION };
 		String msg = Messages.format("FileChooser.FILE_FILTER",implode(", ",exts)); //$NON-NLS-1$ //$NON-NLS-2$
-		fc.addChoosableFileFilter(new CustomFileFilter(msg,exts));
+		FileFilter normalFilter = new CustomFileFilter(msg,exts);
+		fc.addChoosableFileFilter(normalFilter);
+		fc.setFileFilter(normalFilter);
 		}
 
 	private static String implode(String delim, String...args)
