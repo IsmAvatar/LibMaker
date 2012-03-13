@@ -53,7 +53,7 @@ public class LibMaker extends JFrame implements ActionListener
 	public LibMaker()
 		{
 		super(); //Title gets set when library is set
-		setIconImage(Messages.getIconForKey("LibMaker.FRAME_ICON").getImage());
+		setIconImage(Messages.getIconForKey("LibMaker.FRAME_ICON").getImage()); //$NON-NLS-1$
 		ui = new MockUI();
 		fc = new FileChooser(this);
 
@@ -201,7 +201,7 @@ public class LibMaker extends JFrame implements ActionListener
 			setLibrary(new Library());
 			return;
 			}
-		if (cmd.endsWith(".LOAD")) //$NON-NLS-1$
+		if (cmd.endsWith(".OPEN")) //$NON-NLS-1$
 			{
 			if (!saveConfirm()) return;
 			Library lib = fc.openNewFile();

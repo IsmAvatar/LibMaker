@@ -24,7 +24,7 @@ public class FormattedLink<K extends Enum<K>> extends PropertyLink<K,Object> imp
 		super(k);
 		field = f;
 		//		reset();
-		field.addPropertyChangeListener("value",this);
+		field.addPropertyChangeListener("value",this); //$NON-NLS-1$
 		}
 
 	@Override
