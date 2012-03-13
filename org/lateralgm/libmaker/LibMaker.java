@@ -218,6 +218,12 @@ public class LibMaker extends JFrame implements ActionListener
 			save(true);
 			return;
 			}
+		if (cmd.endsWith(".MERGE")) //$NON-NLS-1$
+			{
+			Library lib = fc.openNewFile();
+			if (lib != null) currentLib.actions.addAll(lib.actions);
+			return;
+			}
 		if (cmd.endsWith(".EXIT")) //$NON-NLS-1$
 			{
 			if (!saveConfirm()) return;

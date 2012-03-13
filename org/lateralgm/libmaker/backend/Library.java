@@ -10,9 +10,9 @@ package org.lateralgm.libmaker.backend;
 
 import java.io.File;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Random;
 
+import org.lateralgm.libmaker.components.ObservableList;
 import org.lateralgm.libmaker.components.ObservableList.ActiveArrayList;
 
 public class Library
@@ -76,7 +76,7 @@ public class Library
 
 	public File sourceFile;
 	public Format format;
-	public List<Action> actions = new ActiveArrayList<Action>();
+	public ObservableList<Action> actions = new ActiveArrayList<Action>();
 
 	public enum PLibrary
 		{

@@ -49,10 +49,13 @@ import org.lateralgm.libmaker.backend.Library;
 import org.lateralgm.libmaker.backend.Library.PLibrary;
 import org.lateralgm.libmaker.components.ListListModel;
 import org.lateralgm.libmaker.components.NumberField;
+import org.lateralgm.libmaker.components.ObservableList.ListUpdateEvent;
+import org.lateralgm.libmaker.components.ObservableList.ListUpdateListener;
 import org.lateralgm.libmaker.components.SingleListSelectionModel;
 import org.lateralgm.libmaker.uilink.PropertyLink.PLFactory;
 
-public class MockUI extends JSplitPane implements ListSelectionListener,ChangeListener
+public class MockUI extends JSplitPane implements ListSelectionListener,ChangeListener,
+		ListUpdateListener
 	{
 	private static final long serialVersionUID = 1L;
 
@@ -202,7 +205,6 @@ public class MockUI extends JSplitPane implements ListSelectionListener,ChangeLi
 				Action a = new Action();
 				lib.actions.add(a);
 				lActions.setSelectedValue(a,true);
-				a.addChangeListener(MockUI.this);
 				}
 			if (s == bDel)
 				{
@@ -259,6 +261,7 @@ public class MockUI extends JSplitPane implements ListSelectionListener,ChangeLi
 		control.setComponents(lib);
 		mActions.setList(lib.actions);
 		lActions.setSelectedIndex(lib.actions.isEmpty() ? -1 : 0);
+		lib.actions.addListUpdateListener(this);
 		for (Action a : lib.actions)
 			a.addChangeListener(this);
 		lActions.updateUI();
@@ -320,6 +323,15 @@ public class MockUI extends JSplitPane implements ListSelectionListener,ChangeLi
 	@Override
 	public void stateChanged(ChangeEvent e)
 		{
+		lActions.updateUI();
+		}
+
+	@Override
+	public void listUpdate(ListUpdateEvent evt)
+		{
+		if (evt.type != ListUpdateEvent.Type.ADDED) return;
+		for (int i = evt.fromIndex; i < evt.toIndex; i++)
+			lib.actions.get(i).addChangeListener(this);
 		lActions.updateUI();
 		}
 	}
