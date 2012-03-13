@@ -74,10 +74,12 @@ public class GeneralPane extends GroupPanel implements ActionPanel,ActionListene
 		dKind = new JComboBox(Action.Kind.values());
 		dKind.setRenderer(new EnumRenderer("ActionKind.")); //$NON-NLS-1$
 		dKind.addActionListener(this);
+		plf.make(dKind,PAction.KIND);
 
 		dExec = new JComboBox(Action.Execution.values());
 		dExec.setRenderer(new EnumRenderer("Execution.")); //$NON-NLS-1$
 		dExec.addActionListener(this);
+		plf.make(dExec,PAction.EXEC_TYPE);
 
 		cbHidden = new JCheckBox(Messages.getString("GeneralPane.HIDDEN")); //$NON-NLS-1$
 		cbAdvanced = new JCheckBox(Messages.getString("GeneralPane.ADVANCED")); //$NON-NLS-1$
@@ -184,14 +186,14 @@ public class GeneralPane extends GroupPanel implements ActionPanel,ActionListene
 		tList.setText(a.list);
 		tHint.setText(a.hint);*/
 
-		dKind.setSelectedItem(a.get(PAction.KIND));
+		//		dKind.setSelectedItem(a.get(PAction.KIND));
 
 		/*		cbHidden.setSelected(a.hidden);
 				cbAdvanced.setSelected(a.advanced);
 				cbRegistered.setSelected(a.registered);*/
 
-		dExec.setSelectedItem(a.get(PAction.EXEC_TYPE));
-//		if (a.execType == Execution.FUNCTION) tFunction.setText(a.execInfo);
+		//		dExec.setSelectedItem(a.get(PAction.EXEC_TYPE));
+		//		if (a.execType == Execution.FUNCTION) tFunction.setText(a.execInfo);
 		}
 
 	@Override

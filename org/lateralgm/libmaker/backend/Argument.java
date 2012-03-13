@@ -8,6 +8,8 @@
 
 package org.lateralgm.libmaker.backend;
 
+import java.util.EnumMap;
+
 public class Argument
 	{
 	public static enum Kind
@@ -15,6 +17,16 @@ public class Argument
 		EXPRESSION,STRING,BOTH,BOOLEAN,MENU,COLOR,FONT_STRING,SPRITE,SOUND,BACKGROUND,PATH,SCRIPT,
 		OBJECT,ROOM,FONT,TIMELINE
 		}
+
+	public enum PArgument
+		{
+		CAPTION,KIND,DEF_VALUE,MENU_OPTS
+		}
+
+	private static final EnumMap<PArgument,Object> DEFS = PropertyMap.makeDefaultMap(PArgument.class,
+			null,Kind.EXPRESSION,"0","item 1|item 2");
+
+	public final PropertyMap<PArgument> properties = new PropertyMap<PArgument>(PArgument.class,DEFS);
 
 	public String caption;
 	public Kind kind = Kind.EXPRESSION;
@@ -25,5 +37,6 @@ public class Argument
 	/*package*/Argument(int id)
 		{
 		caption = "Argument " + id + ":";
+		properties.put(PArgument.CAPTION,caption);
 		}
 	}

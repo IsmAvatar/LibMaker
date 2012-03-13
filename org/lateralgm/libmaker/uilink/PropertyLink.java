@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.text.JTextComponent;
 
@@ -23,14 +24,14 @@ public abstract class PropertyLink<K extends Enum<K>, V>
 	PropertyMap<K> map;
 	public final K key;
 
-	PropertyLink(K k)
+	protected PropertyLink(K k)
 		{
 		key = k;
 		}
 
 	protected abstract void setComponent(V t);
 
-	void setMap(PropertyMap<K> m)
+	public void setMap(PropertyMap<K> m)
 		{
 		map = m;
 		reset();
@@ -51,7 +52,7 @@ public abstract class PropertyLink<K extends Enum<K>, V>
 		{
 		List<PropertyLink<K,?>> links = new LinkedList<PropertyLink<K,?>>();
 
-		private PropertyLink<K,?> add(PropertyLink<K,?> pl)
+		public PropertyLink<K,?> add(PropertyLink<K,?> pl)
 			{
 			links.add(pl);
 			return pl;
@@ -76,6 +77,11 @@ public abstract class PropertyLink<K extends Enum<K>, V>
 		public PropertyLink<K,?> make(JFormattedTextField tf, K k)
 			{
 			return add(new FormattedLink<K>(tf,k));
+			}
+
+		public PropertyLink<K,?> make(JComboBox cb, K k)
+			{
+			return add(new ComboBoxValueLink<K>(cb,k));
 			}
 		}
 	}

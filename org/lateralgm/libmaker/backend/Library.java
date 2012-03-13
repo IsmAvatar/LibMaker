@@ -74,6 +74,8 @@ public class Library
 		return new Random().nextInt(999000) + 1000;
 		}
 
+	public File sourceFile;
+	public Format format;
 	public List<Action> actions = new ActiveArrayList<Action>();
 
 	public enum PLibrary
@@ -95,7 +97,4 @@ public class Library
 		{
 		return properties.get(key);
 		}
-
-	public File sourceFile;
-	public Format format;
 	}

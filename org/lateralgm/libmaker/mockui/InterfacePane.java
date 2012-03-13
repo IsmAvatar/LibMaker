@@ -55,6 +55,7 @@ public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListe
 
 		dKind = new JComboBox(InterfaceKind.values());
 		dKind.setRenderer(new EnumRenderer("ActionIfaceKind.")); //$NON-NLS-1$
+		plf.make(dKind,PAction.IFACE_KIND);
 
 		cbQuestion = new JCheckBox(Messages.getString("InterfacePane.QUESTION")); //$NON-NLS-1$
 		cbApply = new JCheckBox(Messages.getString("InterfacePane.APPLY")); //$NON-NLS-1$
