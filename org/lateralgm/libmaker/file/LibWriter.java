@@ -22,6 +22,8 @@ import javax.imageio.ImageIO;
 import org.lateralgm.libmaker.backend.Action;
 import org.lateralgm.libmaker.backend.Argument;
 import org.lateralgm.libmaker.backend.Library;
+import org.lateralgm.libmaker.backend.Library.PLibrary;
+import org.lateralgm.libmaker.backend.PropertyMap;
 
 public class LibWriter
 	{
@@ -60,14 +62,13 @@ public class LibWriter
 		{
 		ver = ver >= 520 ? 520 : 500;
 		out.write4(ver);
-		out.writeStr(lib.caption);
-		out.write4(lib.id);
-		out.writeStr(lib.author);
-		out.write4(lib.version);
+		out.writeStr(lib.properties,PLibrary.CAPTION);
+		out.write4(lib.properties,PLibrary.ID);
+		out.writeStr(lib.properties,PLibrary.AUTHOR);
+		out.write4(lib.properties,PLibrary.VERSION);
 		out.writeD(0); //changed
-		out.writeStr(lib.info);
-		out.writeStr(lib.initCode);
-		out.writeBool(lib.advanced);
+		out.writeStr(lib.properties,PLibrary.INFO,PLibrary.INIT_CODE);
+		out.writeBool(lib.properties,PLibrary.ADVANCED);
 		out.write4(lib.actions.size()); // no of actions/official lib identifier thingy
 		out.write4(lib.actions.size());
 		for (Action act : lib.actions)
@@ -115,6 +116,46 @@ public class LibWriter
 			}
 		}
 
+	enum Size
+		{
+		I1,I2,I3,I4,S1,S4
+		}
+
+	private static <P extends Enum<P>>void write(GmStreamEncoder out, Size[] sizes,
+			PropertyMap<P> map, P...keys) throws IOException
+		{
+		if (sizes.length != keys.length) throw new IllegalArgumentException();
+		for (int i = 0; i < sizes.length; i++)
+			write(out,sizes[i],map.get(keys[i]));
+		}
+
+	private static void write(GmStreamEncoder out, Size size, Object o) throws IOException
+		{
+		switch (size)
+			{
+			case I1:
+				out.write((Integer) o);
+				return;
+			case I2:
+				out.write2((Integer) o);
+				return;
+			case I3:
+				out.write3((Integer) o);
+				return;
+			case I4:
+				out.write4((Integer) o);
+				return;
+			case S1:
+				out.writeStr1((String) o);
+				return;
+			case S4:
+				out.writeStr((String) o);
+				return;
+			default:
+				throw new IllegalArgumentException();
+			}
+		}
+
 	/** Workhorse for write a library of LGL format out of given GmStreamEncoder */
 	public static void saveLgl(Library lib, GmStreamEncoder out, int iconColumns) throws IOException
 		{
@@ -123,14 +164,13 @@ public class LibWriter
 
 		out.write(HDR);
 		out.write2(VER);
-		out.write3(lib.id);
-		out.writeStr1(lib.caption);
-		out.writeStr(lib.author);
-		out.write4(lib.version);
+
+		Size s[] = { Size.I3,Size.S1,Size.S1,Size.I4 };
+		PLibrary p[] = { PLibrary.ID,PLibrary.CAPTION,PLibrary.AUTHOR,PLibrary.VERSION };
+		write(out,s,lib.properties,p);
 		out.writeD(0); //lib.changed
-		out.writeStr(lib.info);
-		out.writeStr(lib.initCode);
-		int acts = lib.advanced ? 128 : 0;
+		out.writeStr(lib.properties,PLibrary.INFO,PLibrary.INIT_CODE);
+		int acts = lib.get(PLibrary.ADVANCED) ? 128 : 0;
 		acts |= lib.actions.size();
 		out.write4(acts);
 

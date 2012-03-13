@@ -23,6 +23,7 @@ import java.util.zip.Inflater;
 import javax.imageio.ImageIO;
 
 import org.lateralgm.libmaker.Messages;
+import org.lateralgm.libmaker.backend.PropertyMap;
 
 public class GmStreamDecoder extends StreamDecoder
 	{
@@ -141,7 +142,7 @@ public class GmStreamDecoder extends StreamDecoder
 			}
 		return val == 0 ? false : true;
 		}
-/*
+
 	public <P extends Enum<P>>void read4(PropertyMap<P> map, P...keys) throws IOException
 		{
 		for (P key : keys)
@@ -165,7 +166,7 @@ public class GmStreamDecoder extends StreamDecoder
 		for (P key : keys)
 			map.put(key,readD());
 		}
-*/
+
 	public byte[] decompress(int length) throws IOException,DataFormatException
 		{
 		return decompress(length,length);

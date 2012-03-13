@@ -9,7 +9,6 @@
 package org.lateralgm.libmaker.backend;
 
 import java.io.File;
-import java.util.Date;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Random;
@@ -79,7 +78,7 @@ public class Library
 
 	public enum PLibrary
 		{
-		SOURCE_FILE,FORMAT,CAPTION,ID,AUTHOR,VERSION,CHANGED,INFO,INIT_CODE,ADVANCED
+		CAPTION,ID,AUTHOR,VERSION,CHANGED,INFO,INIT_CODE,ADVANCED
 		}
 
 	private static final EnumMap<PLibrary,Object> DEFS = PropertyMap.makeDefaultMap(PLibrary.class,
@@ -87,16 +86,16 @@ public class Library
 
 	public final PropertyMap<PLibrary> properties = new PropertyMap<PLibrary>(PLibrary.class,DEFS);
 
+	public void put(PLibrary key, Object value)
+		{
+		properties.put(key,value);
+		}
+
+	public <V>V get(PLibrary key)
+		{
+		return properties.get(key);
+		}
+
 	public File sourceFile;
 	public Format format;
-	public String caption;
-	public int id = randomId();
-	//Info
-	public String author;
-	public int version;
-	public Date changed;
-	public String info;
-	//Etc
-	public String initCode;
-	public boolean advanced;
 	}

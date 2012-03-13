@@ -26,6 +26,8 @@ import org.lateralgm.libmaker.backend.Action.Execution;
 import org.lateralgm.libmaker.backend.Action.InterfaceKind;
 import org.lateralgm.libmaker.backend.Argument;
 import org.lateralgm.libmaker.backend.Library;
+import org.lateralgm.libmaker.backend.Library.PLibrary;
+import org.lateralgm.libmaker.backend.PropertyMap;
 
 public class LibReader
 	{
@@ -137,14 +139,13 @@ public class LibReader
 		if (in.read() != 0)
 			throw new LibFormatException(Messages.format("LibReader.ERROR_INVALIDFILE","%s")); //$NON-NLS-1$ //$NON-NLS-2$
 		Library lib = new Library();
-		lib.caption = in.readStr();
-		lib.id = in.read4();
-		lib.author = in.readStr();
-		lib.version = in.read4();
+		in.readStr(lib.properties,PLibrary.CAPTION);
+		in.read4(lib.properties,PLibrary.ID);
+		in.readStr(lib.properties,PLibrary.AUTHOR);
+		in.read4(lib.properties,PLibrary.VERSION);
 		in.readD(); //lib.changed
-		lib.info = in.readStr();
-		lib.initCode = in.readStr();
-		lib.advanced = in.readBool();
+		in.readStr(lib.properties,PLibrary.INFO,PLibrary.INIT_CODE);
+		in.readBool(lib.properties,PLibrary.ADVANCED);
 		in.skip(4); // no of actions/official lib identifier thingy
 		int acts = in.read4();
 		for (int j = 0; j < acts; j++)
@@ -207,6 +208,40 @@ public class LibReader
 		return lib;
 		}
 
+	enum Size
+		{
+		I1,I2,I3,I4,S1,S4
+		}
+
+	private static <P extends Enum<P>>void read(GmStreamDecoder in, Size[] sizes, PropertyMap<P> map,
+			P...keys) throws IOException
+		{
+		if (sizes.length != keys.length) throw new IllegalArgumentException();
+		for (int i = 0; i < sizes.length; i++)
+			map.put(keys[i],read(in,sizes[i]));
+		}
+
+	private static Object read(GmStreamDecoder in, Size size) throws IOException
+		{
+		switch (size)
+			{
+			case I1:
+				return in.read();
+			case I2:
+				return in.read2();
+			case I3:
+				return in.read3();
+			case I4:
+				return in.read4();
+			case S1:
+				return in.readStr1();
+			case S4:
+				return in.readStr();
+			default:
+				return null;
+			}
+		}
+
 	/**
 	 * Workhorse for constructing a library out of given StreamDecoder of LGL format
 	 * @param in
@@ -222,15 +257,14 @@ public class LibReader
 			throw new LibFormatException(invalidFile);
 			}
 		Library lib = new Library();
-		lib.id = in.read3();
-		lib.caption = in.readStr1();
-		lib.author = in.readStr1();
-		lib.version = in.read4();
+
+		Size s[] = { Size.I3,Size.S1,Size.S1,Size.I4 };
+		PLibrary p[] = { PLibrary.ID,PLibrary.CAPTION,PLibrary.AUTHOR,PLibrary.VERSION };
+		read(in,s,lib.properties,p);
 		in.skip(8); //lib.changed
-		lib.info = in.readStr();
-		lib.initCode = in.readStr();
+		in.readStr(lib.properties,PLibrary.INFO,PLibrary.INIT_CODE);
 		int acts = in.read();
-		lib.advanced = mask(acts,128);
+		lib.properties.put(PLibrary.ADVANCED,mask(acts,128));
 		acts &= 127;
 		for (int j = 0; j < acts; j++)
 			{
@@ -239,6 +273,7 @@ public class LibReader
 			Action act = new Action();
 			lib.actions.add(act);
 			act.parent = lib;
+			
 			act.id = in.read2();
 			act.setName(in.readStr1());
 			act.description = in.readStr1();

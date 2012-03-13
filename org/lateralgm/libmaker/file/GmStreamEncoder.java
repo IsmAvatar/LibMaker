@@ -24,6 +24,8 @@ import java.util.zip.Deflater;
 
 import javax.imageio.ImageIO;
 
+import org.lateralgm.libmaker.backend.PropertyMap;
+
 public class GmStreamEncoder extends StreamEncoder
 	{
 	protected int originalPos = -1;
@@ -106,7 +108,7 @@ public class GmStreamEncoder extends StreamEncoder
 		{
 		write4(val ? 1 : 0);
 		}
-/*
+
 	public <P extends Enum<P>>void write4(PropertyMap<P> map, P...keys) throws IOException
 		{
 		for (P key : keys)
@@ -130,7 +132,7 @@ public class GmStreamEncoder extends StreamEncoder
 		for (P key : keys)
 			writeD((Double) map.get(key));
 		}
-
+/*
 	public <R extends Resource<R,?>>void writeId(ResourceReference<R> id) throws IOException
 		{
 		writeId(id,-1);
