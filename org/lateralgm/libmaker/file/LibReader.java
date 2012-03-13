@@ -26,6 +26,7 @@ import org.lateralgm.libmaker.backend.Action.Execution;
 import org.lateralgm.libmaker.backend.Action.InterfaceKind;
 import org.lateralgm.libmaker.backend.Action.PAction;
 import org.lateralgm.libmaker.backend.Argument;
+import org.lateralgm.libmaker.backend.Argument.PArgument;
 import org.lateralgm.libmaker.backend.Library;
 import org.lateralgm.libmaker.backend.Library.PLibrary;
 import org.lateralgm.libmaker.backend.PropertyMap;
@@ -171,17 +172,16 @@ public class LibReader
 			act.put(PAction.KIND,ACT_KINDS[in.read4()]);
 			act.put(PAction.IFACE_KIND,IFACE_KINDS[in.read4()]);
 			in.readBool(act.properties,PAction.QUESTION,PAction.APPLY,PAction.RELATIVE);
-			act.argNum = in.read4();
+			in.read4(act.properties,PAction.ARG_NUM);
 			int args = in.read4();
 			for (int k = 0; k < args; k++)
 				{
 				if (k < act.arguments.length)
 					{
 					Argument arg = act.arguments[k];
-					arg.caption = in.readStr();
-					arg.kind = ARG_KINDS[in.read4()];
-					arg.defValue = in.readStr();
-					arg.menuOptions = in.readStr();
+					in.readStr(arg.properties,PArgument.CAPTION);
+					arg.put(PArgument.KIND,ARG_KINDS[in.read4()]);
+					in.readStr(arg.properties,PArgument.DEF_VALUE,PArgument.MENU_OPTS);
 					}
 				else
 					{
@@ -287,14 +287,16 @@ public class LibReader
 			tags = in.read();
 			act.put(PAction.KIND,ACT_KINDS[tags >> 4]);
 			act.put(PAction.IFACE_KIND,IFACE_KINDS[tags & 15]);
-			act.argNum = in.read();
-			for (int k = 0; k < act.argNum; k++)
+
+			int argNum = in.read();
+			act.put(PAction.ARG_NUM,argNum);
+			for (int k = 0; k < argNum; k++)
 				{
 				Argument arg = act.arguments[k];
-				arg.caption = in.readStr1();
-				arg.kind = ARG_KINDS[in.read()];
-				arg.defValue = in.readStr1();
-				arg.menuOptions = in.readStr1();
+				arg.put(PArgument.CAPTION,in.readStr1());
+				arg.put(PArgument.KIND,ARG_KINDS[in.read()]);
+				arg.put(PArgument.DEF_VALUE,in.readStr1());
+				arg.put(PArgument.MENU_OPTS,in.readStr1());
 				}
 			}
 		loadLGLIcons(lib,in.getInputStream());

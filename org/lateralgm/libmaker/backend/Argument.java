@@ -28,15 +28,19 @@ public class Argument
 
 	public final PropertyMap<PArgument> properties = new PropertyMap<PArgument>(PArgument.class,DEFS);
 
-	public String caption;
-	public Kind kind = Kind.EXPRESSION;
-	public String defValue = "0";
-	public String menuOptions = "item 1|item 2";
-
 	//Only available to Action
 	/*package*/Argument(int id)
 		{
-		caption = "Argument " + id + ":";
-		properties.put(PArgument.CAPTION,caption);
+		properties.put(PArgument.CAPTION,"Argument " + id + ":");
+		}
+
+	public void put(PArgument key, Object value)
+		{
+		properties.put(key,value);
+		}
+
+	public <V>V get(PArgument key)
+		{
+		return properties.get(key);
 		}
 	}

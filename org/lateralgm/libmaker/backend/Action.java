@@ -44,13 +44,12 @@ public class Action
 
 	private static final EnumMap<PAction,Object> DEFS = PropertyMap.makeDefaultMap(PAction.class,
 			null,null,null,false,false,false,null,null,null,Kind.NORMAL,Execution.CODE,null,
-			InterfaceKind.NORMAL,false,true,true,null);
+			InterfaceKind.NORMAL,false,true,true,0);
 
 	public final PropertyMap<PAction> properties = new PropertyMap<PAction>(PAction.class,DEFS);
 
 	//Fields
 	public Library parent;
-	public int argNum;
 	/** .length is always MAX_ARGS. Use argNum to determine actual used argument count. */
 	public Argument arguments[] = new Argument[MAX_ARGS];
 

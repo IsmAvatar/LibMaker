@@ -17,6 +17,7 @@ import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -29,6 +30,7 @@ import org.lateralgm.libmaker.backend.Action;
 import org.lateralgm.libmaker.backend.Action.InterfaceKind;
 import org.lateralgm.libmaker.backend.Action.PAction;
 import org.lateralgm.libmaker.backend.Argument;
+import org.lateralgm.libmaker.backend.Argument.PArgument;
 import org.lateralgm.libmaker.components.EnumRenderer;
 import org.lateralgm.libmaker.mockui.MockUI.ActionPanel;
 import org.lateralgm.libmaker.mockui.MockUI.GroupPanel;
@@ -38,16 +40,59 @@ public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListe
 	{
 	private static final long serialVersionUID = 1L;
 
+	PLFactory<PAction> plf;
 	JComboBox dKind;
 	JCheckBox cbQuestion, cbApply, cbRelative;
-
+	JSpinner sArgNum;
 	SpinnerNumberModel smArgNum;
-	JTextField tArgNames[];
-	JComboBox dArgTypes[];
-	JTextField tArgVals[];
-	JTextField tArgOpts[];
+	ArgumentInfo args[];
 
-	PLFactory<PAction> plf;
+	class ArgumentInfo implements ActionListener
+		{
+		public JTextField tName, tVal, tOpts;
+		public JComboBox dType;
+		PLFactory<PArgument> plf;
+
+		public ArgumentInfo()
+			{
+			plf = new PLFactory<PArgument>();
+
+			tName = new JTextField(9);
+			tVal = new JTextField(8);
+			tOpts = new JTextField(5);
+			plf.make(tName,PArgument.CAPTION);
+			plf.make(tVal,PArgument.DEF_VALUE);
+			plf.make(tOpts,PArgument.MENU_OPTS);
+
+			dType = new JComboBox(Argument.Kind.values());
+			dType.setSelectedItem(Argument.Kind.MENU); //so the menu text field is initially visible
+			dType.setRenderer(new EnumRenderer("ArgumentType.")); //$NON-NLS-1$
+			dType.addActionListener(this);
+			plf.make(dType,PArgument.KIND);
+			}
+
+		public void setComponents(Argument arg)
+			{
+			plf.setMap(arg.properties);
+			}
+
+		public void setVisible(boolean vis)
+			{
+			tName.setVisible(vis);
+			dType.setVisible(vis);
+			tVal.setVisible(vis);
+			tOpts.setVisible(vis && dType.getSelectedItem() == Argument.Kind.MENU);
+			}
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+			{
+			JComboBox cb = (JComboBox) e.getSource();
+			boolean b = cb.isVisible() && cb.getSelectedItem() == Argument.Kind.MENU;
+			tOpts.setVisible(b);
+			updateUI(); //inform parent panel that a component needs drawing
+			}
+		}
 
 	protected void initKeyComponents()
 		{
@@ -64,37 +109,22 @@ public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListe
 		plf.make(cbApply,PAction.APPLY);
 		plf.make(cbRelative,PAction.RELATIVE);
 
-		smArgNum = new SpinnerNumberModel(6,0,Action.MAX_ARGS,1); //so all 6 arguments are initially visible
+		smArgNum = new SpinnerNumberModel(Action.MAX_ARGS,0,Action.MAX_ARGS,1); //so all arguments are initially visible
 		smArgNum.addChangeListener(this);
 
-		tArgNames = new JTextField[Action.MAX_ARGS];
-		dArgTypes = new JComboBox[Action.MAX_ARGS];
-		tArgVals = new JTextField[Action.MAX_ARGS];
-		tArgOpts = new JTextField[Action.MAX_ARGS];
-
-		for (int arg = 0; arg < Action.MAX_ARGS; arg++)
+		sArgNum = new JSpinner(smArgNum);
+		JComponent editor = sArgNum.getEditor();
+		if (editor instanceof JSpinner.DefaultEditor)
 			{
-			dArgTypes[arg] = new JComboBox(Argument.Kind.values());
-			dArgTypes[arg].setSelectedItem(Argument.Kind.MENU); //so the menu text field is initially visible
-			dArgTypes[arg].setRenderer(new EnumRenderer("ArgumentType.")); //$NON-NLS-1$
-
-			tArgNames[arg] = new JTextField(9);
-			tArgVals[arg] = new JTextField(8);
-			tArgOpts[arg] = new JTextField(5);
-
-			final JTextField tF = tArgOpts[arg];
-			dArgTypes[arg].addActionListener(new ActionListener()
-				{
-					@Override
-					public void actionPerformed(ActionEvent e)
-						{
-						JComboBox cb = (JComboBox) e.getSource();
-						boolean b = cb.isVisible() && cb.getSelectedItem() == Argument.Kind.MENU;
-						tF.setVisible(b);
-						updateUI(); //inform parent that a component needs drawing
-						}
-				});
+			JFormattedTextField tf = ((JSpinner.DefaultEditor) editor).getTextField();
+			tf.setColumns(3);
+			tf.setHorizontalAlignment(JTextField.LEFT);
+			plf.make(tf,PAction.ARG_NUM);
 			}
+
+		args = new ArgumentInfo[Action.MAX_ARGS];
+		for (int arg = 0; arg < Action.MAX_ARGS; arg++)
+			args[arg] = new ArgumentInfo();
 		}
 
 	@Override
@@ -105,15 +135,6 @@ public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListe
 		JLabel lKind = new JLabel(Messages.getString("InterfacePane.KIND")); //$NON-NLS-1$
 		JLabel lArgNum = new JLabel(Messages.getString("InterfacePane.ARG_COUNT")); //$NON-NLS-1$
 
-		JSpinner sArgNum = new JSpinner(smArgNum);
-		JComponent editor = sArgNum.getEditor();
-		if (editor instanceof JSpinner.DefaultEditor)
-			{
-			JTextField tf = ((JSpinner.DefaultEditor) editor).getTextField();
-			tf.setColumns(3);
-			tf.setHorizontalAlignment(JTextField.LEFT);
-			}
-
 		ParallelGroup hgC1 = layout.createParallelGroup();
 		ParallelGroup hgC2 = layout.createParallelGroup();
 		ParallelGroup hgC3 = layout.createParallelGroup();
@@ -122,18 +143,18 @@ public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListe
 
 		int PREF = GroupLayout.PREFERRED_SIZE, DEF = GroupLayout.DEFAULT_SIZE;
 
-		for (int arg = 0; arg < Action.MAX_ARGS; arg++)
+		for (ArgumentInfo arg : args)
 			{
-			hgC1.addComponent(tArgNames[arg],PREF,DEF,PREF);
-			hgC2.addComponent(dArgTypes[arg],PREF,DEF,PREF);
-			hgC3.addComponent(tArgVals[arg],PREF,DEF,PREF);
-			hgC4.addComponent(tArgOpts[arg],PREF,DEF,Short.MAX_VALUE);
+			hgC1.addComponent(arg.tName,PREF,DEF,PREF);
+			hgC2.addComponent(arg.dType,PREF,DEF,PREF);
+			hgC3.addComponent(arg.tVal,PREF,DEF,PREF);
+			hgC4.addComponent(arg.tOpts,PREF,DEF,Short.MAX_VALUE);
 
 			vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			/**/.addComponent(tArgNames[arg])
-			/**/.addComponent(dArgTypes[arg])
-			/**/.addComponent(tArgVals[arg])
-			/**/.addComponent(tArgOpts[arg]));
+			/**/.addComponent(arg.tName)
+			/**/.addComponent(arg.dType)
+			/**/.addComponent(arg.tVal)
+			/**/.addComponent(arg.tOpts));
 			}
 
 		layout.setHorizontalGroup(layout.createSequentialGroup()
@@ -173,30 +194,15 @@ public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListe
 	public void setComponents(Action a)
 		{
 		plf.setMap(a.properties);
-		dKind.setSelectedItem(a.get(PAction.IFACE_KIND));
-
-		smArgNum.setValue(a.argNum);
 		for (int arg = 0; arg < Action.MAX_ARGS; arg++)
-			{
-			Argument aa = a.arguments[arg];
-			tArgNames[arg].setText(aa.caption);
-			dArgTypes[arg].setSelectedItem(aa.kind);
-			tArgVals[arg].setText(aa.defValue);
-			tArgOpts[arg].setText(aa.menuOptions);
-			}
+			args[arg].setComponents(a.arguments[arg]);
 		}
 
 	@Override
 	public void stateChanged(ChangeEvent e)
 		{
-		int args = smArgNum.getNumber().intValue();
+		int argNum = smArgNum.getNumber().intValue();
 		for (int arg = 0; arg < Action.MAX_ARGS; arg++)
-			{
-			boolean visible = arg < args;
-			tArgNames[arg].setVisible(visible);
-			dArgTypes[arg].setVisible(visible);
-			tArgVals[arg].setVisible(visible);
-			tArgOpts[arg].setVisible(visible && dArgTypes[arg].getSelectedItem() == Argument.Kind.MENU);
-			}
+			args[arg].setVisible(arg < argNum);
 		}
 	}

@@ -23,6 +23,7 @@ import org.lateralgm.libmaker.backend.Action;
 import org.lateralgm.libmaker.backend.Action.Execution;
 import org.lateralgm.libmaker.backend.Action.PAction;
 import org.lateralgm.libmaker.backend.Argument;
+import org.lateralgm.libmaker.backend.Argument.PArgument;
 import org.lateralgm.libmaker.backend.Library;
 import org.lateralgm.libmaker.backend.Library.PLibrary;
 import org.lateralgm.libmaker.backend.PropertyMap;
@@ -88,17 +89,16 @@ public class LibWriter
 			out.write4(ACT_KINDS.get(act.get(PAction.KIND)));
 			out.write4(IFACE_KINDS.get(act.get(PAction.IFACE_KIND)));
 			out.writeBool(act.properties,PAction.QUESTION,PAction.APPLY,PAction.RELATIVE);
-			out.write4(act.argNum);
+			out.write4(act.properties,PAction.ARG_NUM);
 			out.write4(8); //8 vs act.argNum vs MAX_ARGS?
 
 			//This always writes MAX_ARGS arguments. Alternatively, we could just write
 			//argNum arguments, and truncate the remaining invisible/unused arguments.
 			for (Argument arg : act.arguments)
 				{
-				out.writeStr(arg.caption);
-				out.write4(ARG_KINDS.get(arg.kind));
-				out.writeStr(arg.defValue);
-				out.writeStr(arg.menuOptions);
+				out.writeStr(arg.properties,PArgument.CAPTION);
+				out.write4(ARG_KINDS.get(arg.get(PArgument.KIND)));
+				out.writeStr(arg.properties,PArgument.DEF_VALUE,PArgument.MENU_OPTS);
 				}
 			for (int k = act.arguments.length; k < 8; k++)
 				{
@@ -196,14 +196,15 @@ public class LibWriter
 			kind |= IFACE_KINDS.get(act.get(PAction.IFACE_KIND));
 			out.write(kind);
 
-			out.write(act.argNum);
-			for (int k = 0; k < act.argNum; k++)
+			int argNum = act.get(PAction.ARG_NUM);
+			out.write(argNum);
+			for (int k = 0; k < argNum; k++)
 				{
 				Argument arg = act.arguments[k];
-				out.writeStr1(arg.caption);
-				out.write(ARG_KINDS.get(arg.kind));
-				out.writeStr1(arg.defValue);
-				out.writeStr1(arg.menuOptions);
+				out.writeStr1((String) arg.get(PArgument.CAPTION));
+				out.write(ARG_KINDS.get(arg.get(PArgument.KIND)));
+				out.writeStr1((String) arg.get(PArgument.DEF_VALUE));
+				out.writeStr1((String) arg.get(PArgument.MENU_OPTS));
 				}
 			}
 
