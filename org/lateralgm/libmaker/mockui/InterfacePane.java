@@ -191,7 +191,7 @@ public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListe
 		}
 
 	@Override
-	public void setComponents(Action a)
+	public void setAction(Action a)
 		{
 		plf.setMap(a.properties);
 		for (int arg = 0; arg < Action.MAX_ARGS; arg++)

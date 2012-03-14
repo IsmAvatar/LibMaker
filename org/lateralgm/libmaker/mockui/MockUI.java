@@ -280,7 +280,7 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 
 	public static interface ActionPanel
 		{
-		void setComponents(Action a);
+		void setAction(Action a);
 		}
 
 	public static abstract class GroupPanel extends JPanel
@@ -327,8 +327,8 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 		control.bDown.setEnabled(ind != lActions.getModel().getSize() - 1);
 
 		Action a = (Action) v;
-		general.setComponents(a);
-		iface.setComponents(a);
+		general.setAction(a);
+		iface.setAction(a);
 		}
 
 	@Override

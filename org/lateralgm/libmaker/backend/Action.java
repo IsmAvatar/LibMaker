@@ -8,7 +8,12 @@
 
 package org.lateralgm.libmaker.backend;
 
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.util.EnumMap;
+
+import org.lateralgm.libmaker.Messages;
 
 public class Action
 	{
@@ -30,6 +35,16 @@ public class Action
 
 	public static int MAX_ARGS = 6;
 	private static int lastId = 1;
+	private static final BufferedImage DEFAULT_TILE;
+	static
+		{
+		Image i = Messages.getIconForKey("Action.DEFAULT_TILE").getImage(); //$NON-NLS-1$
+		DEFAULT_TILE = new BufferedImage(i.getWidth(null),i.getHeight(null),
+				BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics g = DEFAULT_TILE.getGraphics();
+		g.drawImage(i,0,0,null);
+		g.dispose();
+		}
 
 	public enum PAction
 		{
@@ -38,7 +53,7 @@ public class Action
 		}
 
 	private static final EnumMap<PAction,Object> DEFS = PropertyMap.makeDefaultMap(PAction.class,
-			null,null,null,false,false,false,null,null,null,Kind.NORMAL,Execution.CODE,null,
+			null,null,DEFAULT_TILE,false,false,false,null,null,null,Kind.NORMAL,Execution.CODE,null,
 			InterfaceKind.NORMAL,false,true,true,0);
 
 	public final PropertyMap<PAction> properties = new PropertyMap<PAction>(PAction.class,DEFS);

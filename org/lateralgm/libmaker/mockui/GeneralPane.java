@@ -29,6 +29,7 @@ import org.lateralgm.libmaker.backend.Action.Kind;
 import org.lateralgm.libmaker.backend.Action.PAction;
 import org.lateralgm.libmaker.components.EnumRenderer;
 import org.lateralgm.libmaker.components.NumberField;
+import org.lateralgm.libmaker.file.ImageChooser;
 import org.lateralgm.libmaker.mockui.MockUI.ActionPanel;
 import org.lateralgm.libmaker.mockui.MockUI.GroupPanel;
 import org.lateralgm.libmaker.uilink.PropertyLink.PLFactory;
@@ -177,7 +178,7 @@ public class GeneralPane extends GroupPanel implements ActionPanel,ActionListene
 		}
 
 	@Override
-	public void setComponents(Action a)
+	public void setAction(Action a)
 		{
 		this.a = a;
 		plf.setMap(a.properties);
@@ -189,6 +190,8 @@ public class GeneralPane extends GroupPanel implements ActionPanel,ActionListene
 	public void actionPerformed(ActionEvent e)
 		{
 		Object src = e.getSource();
+
+		//Dropdowns
 		if (src == dKind)
 			{
 			boolean normal = dKind.getSelectedItem() == Kind.NORMAL;
@@ -211,6 +214,23 @@ public class GeneralPane extends GroupPanel implements ActionPanel,ActionListene
 			return;
 			}
 
-		//TODO: bImageChange and bExecCode
+		//Buttons
+		if (src == bImageChange)
+			{
+			BufferedImage bi = ImageChooser.getValidImage(null);
+			if (bi != null)
+				{
+				//XXX: Better way to handle oversize images?
+				if (bi.getWidth() > 24 || bi.getHeight() > 24) bi = bi.getSubimage(0,0,24,24);
+				a.put(PAction.IMAGE,bi);
+				imagePreview.setIcon(new ImageIcon(bi));
+				}
+			return;
+			}
+		if (src == bExecCode)
+			{
+			//TODO: Execution Code
+			return;
+			}
 		}
 	}
