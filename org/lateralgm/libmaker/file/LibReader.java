@@ -145,7 +145,7 @@ public class LibReader
 		in.read4(lib.properties,PLibrary.ID);
 		in.readStr(lib.properties,PLibrary.AUTHOR);
 		in.read4(lib.properties,PLibrary.VERSION);
-		in.readD(); //lib.changed
+		in.readD(lib.properties,PLibrary.CHANGED);
 		in.readStr(lib.properties,PLibrary.INFO,PLibrary.INIT_CODE);
 		in.readBool(lib.properties,PLibrary.ADVANCED);
 		in.skip(4); // no of actions/official lib identifier thingy
@@ -258,7 +258,7 @@ public class LibReader
 		Size s[] = { Size.I3,Size.S1,Size.S1,Size.I4 };
 		PLibrary pl[] = { PLibrary.ID,PLibrary.CAPTION,PLibrary.AUTHOR,PLibrary.VERSION };
 		read(in,s,lib.properties,pl);
-		in.skip(8); //lib.changed
+		in.readD(lib.properties,PLibrary.CHANGED);
 		in.readStr(lib.properties,PLibrary.INFO,PLibrary.INIT_CODE);
 		int acts = in.read();
 		lib.properties.put(PLibrary.ADVANCED,mask(acts,128));

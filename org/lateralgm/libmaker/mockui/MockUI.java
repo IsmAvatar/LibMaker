@@ -91,6 +91,7 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 		JButton bAdd, bDel, bUp, bDown;
 		JCheckBox cbAdvanced;
 
+		Library lib;
 		PLFactory<PLibrary> plf;
 
 		protected void initKeyComponents()
@@ -185,8 +186,9 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 			/**/.addComponent(listButtons,PREF,DEF,PREF));
 			}
 
-		public void setComponents(Library lib)
+		public void setLibrary(Library lib)
 			{
+			this.lib = lib;
 			plf.setMap(lib.properties);
 			}
 
@@ -199,7 +201,16 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 				tId.setValue(Library.randomId());
 				return;
 				}
-			//TODO: Handle bInfo and bCode
+			if (s == bInfo)
+				{
+				InfoPane.showInDialog(null,lib);
+				return;
+				}
+			if (s == bCode)
+				{
+				//TODO: Initialization Code
+				return;
+				}
 			if (s == bAdd)
 				{
 				Action a = new Action();
@@ -258,7 +269,7 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 	public void setLibrary(Library lib)
 		{
 		this.lib = lib;
-		control.setComponents(lib);
+		control.setLibrary(lib);
 		mActions.setList(lib.actions);
 		lActions.setSelectedIndex(lib.actions.isEmpty() ? -1 : 0);
 		lib.actions.addListUpdateListener(this);

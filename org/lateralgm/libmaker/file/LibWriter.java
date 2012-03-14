@@ -69,7 +69,8 @@ public class LibWriter
 		out.write4(lib.properties,PLibrary.ID);
 		out.writeStr(lib.properties,PLibrary.AUTHOR);
 		out.write4(lib.properties,PLibrary.VERSION);
-		out.writeD(0); //changed
+		lib.put(PLibrary.CHANGED,Library.longTimeToGmTime(System.currentTimeMillis()));
+		out.writeD(lib.properties,PLibrary.CHANGED);
 		out.writeStr(lib.properties,PLibrary.INFO,PLibrary.INIT_CODE);
 		out.writeBool(lib.properties,PLibrary.ADVANCED);
 		out.write4(lib.actions.size()); // no of actions/official lib identifier thingy
@@ -168,7 +169,8 @@ public class LibWriter
 		Size s[] = { Size.I3,Size.S1,Size.S1,Size.I4 };
 		PLibrary pl[] = { PLibrary.ID,PLibrary.CAPTION,PLibrary.AUTHOR,PLibrary.VERSION };
 		write(out,s,lib.properties,pl);
-		out.writeD(0); //lib.changed
+		lib.put(PLibrary.CHANGED,Library.longTimeToGmTime(System.currentTimeMillis()));
+		out.writeD(lib.properties,PLibrary.CHANGED);
 		out.writeStr(lib.properties,PLibrary.INFO,PLibrary.INIT_CODE);
 		int acts = lib.get(PLibrary.ADVANCED) ? 128 : 0;
 		acts |= lib.actions.size();

@@ -9,6 +9,7 @@
 package org.lateralgm.libmaker.backend;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.EnumMap;
 import java.util.Random;
 
@@ -84,9 +85,15 @@ public class Library
 		}
 
 	private static final EnumMap<PLibrary,Object> DEFS = PropertyMap.makeDefaultMap(PLibrary.class,
-			null,randomId(),null,100,null,null,null,false);
+			null,null/*set at init*/,null,100,null/*set at init*/,null,null,false);
 
 	public final PropertyMap<PLibrary> properties = new PropertyMap<PLibrary>(PLibrary.class,DEFS);
+
+	public Library()
+		{
+		put(PLibrary.ID,randomId());
+		put(PLibrary.CHANGED,longTimeToGmTime(System.currentTimeMillis()));
+		}
 
 	public void put(PLibrary key, Object value)
 		{
@@ -96,5 +103,17 @@ public class Library
 	public <V>V get(PLibrary key)
 		{
 		return properties.get(key);
+		}
+
+	public static Calendar gmBaseTime()
+		{
+		Calendar res = Calendar.getInstance();
+		res.set(1899,11,29,23,59,59);
+		return res;
+		}
+
+	public static double longTimeToGmTime(long time)
+		{
+		return (time - gmBaseTime().getTimeInMillis()) / 86400000d;
 		}
 	}
