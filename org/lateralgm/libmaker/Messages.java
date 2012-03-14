@@ -19,6 +19,7 @@
 
 package org.lateralgm.libmaker;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.text.MessageFormat;
@@ -26,6 +27,7 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public final class Messages
@@ -94,5 +96,21 @@ public final class Messages
 		String filename = ICONS_PROPS.getProperty(key);
 		if (filename == null || filename.isEmpty()) return null;
 		return findIcon(filename);
+		}
+
+	public static BufferedImage getImageForKey(String key)
+		{
+		String filename = ICONS_PROPS.getProperty(key);
+		if (filename == null || filename.isEmpty()) return null;
+		URL url = Messages.class.getClassLoader().getResource(ICONS_PATH + filename);
+		if (url == null) return null;
+		try
+			{
+			return ImageIO.read(url);
+			}
+		catch (IOException e)
+			{
+			return null;
+			}
 		}
 	}
