@@ -231,8 +231,7 @@ public class LibMaker extends JFrame implements ActionListener
 			return;
 			}
 
-		// TODO Respond to moar menu/toolbar actions
-
+		//TODO: Help and About
 		}
 
 	public static void main(String[] args)

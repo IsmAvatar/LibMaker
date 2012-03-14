@@ -37,8 +37,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -47,6 +45,8 @@ import org.lateralgm.libmaker.backend.Action;
 import org.lateralgm.libmaker.backend.Action.PAction;
 import org.lateralgm.libmaker.backend.Library;
 import org.lateralgm.libmaker.backend.Library.PLibrary;
+import org.lateralgm.libmaker.backend.PropertyMap.PropertyListener;
+import org.lateralgm.libmaker.backend.PropertyMap.PropertyUpdateEvent;
 import org.lateralgm.libmaker.components.ListListModel;
 import org.lateralgm.libmaker.components.NumberField;
 import org.lateralgm.libmaker.components.ObservableList.ListUpdateEvent;
@@ -54,7 +54,7 @@ import org.lateralgm.libmaker.components.ObservableList.ListUpdateListener;
 import org.lateralgm.libmaker.components.SingleListSelectionModel;
 import org.lateralgm.libmaker.uilink.PropertyLink.PLFactory;
 
-public class MockUI extends JSplitPane implements ListSelectionListener,ChangeListener,
+public class MockUI extends JSplitPane implements ListSelectionListener,PropertyListener<PAction>,
 		ListUpdateListener
 	{
 	private static final long serialVersionUID = 1L;
@@ -263,7 +263,7 @@ public class MockUI extends JSplitPane implements ListSelectionListener,ChangeLi
 		lActions.setSelectedIndex(lib.actions.isEmpty() ? -1 : 0);
 		lib.actions.addListUpdateListener(this);
 		for (Action a : lib.actions)
-			a.addChangeListener(this);
+			a.properties.addPropertyListener(PAction.NAME,this);
 		lActions.updateUI();
 		}
 
@@ -321,7 +321,7 @@ public class MockUI extends JSplitPane implements ListSelectionListener,ChangeLi
 		}
 
 	@Override
-	public void stateChanged(ChangeEvent e)
+	public void propertyUpdate(PropertyUpdateEvent<PAction> e)
 		{
 		lActions.updateUI();
 		}
@@ -330,8 +330,8 @@ public class MockUI extends JSplitPane implements ListSelectionListener,ChangeLi
 	public void listUpdate(ListUpdateEvent evt)
 		{
 		if (evt.type != ListUpdateEvent.Type.ADDED) return;
-		for (int i = evt.fromIndex; i < evt.toIndex; i++)
-			lib.actions.get(i).addChangeListener(this);
+		for (int i = evt.fromIndex; i <= evt.toIndex; i++)
+			lib.actions.get(i).properties.addPropertyListener(PAction.NAME,this);
 		lActions.updateUI();
 		}
 	}

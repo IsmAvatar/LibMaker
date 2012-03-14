@@ -8,12 +8,7 @@
 
 package org.lateralgm.libmaker.backend;
 
-import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.List;
-
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 public class Action
 	{
@@ -71,22 +66,5 @@ public class Action
 	public <V>V get(PAction key)
 		{
 		return properties.get(key);
-		}
-
-	//XXX: We're keeping this just until PropertyMap has Listener
-	List<ChangeListener> listeners = new ArrayList<ChangeListener>();
-
-	public void addChangeListener(ChangeListener l)
-		{
-		listeners.add(l);
-		}
-
-	public void setName(String name)
-		{
-		put(PAction.NAME,name);
-
-		ChangeEvent evt = new ChangeEvent(this);
-		for (ChangeListener l : listeners)
-			l.stateChanged(evt);
 		}
 	}
