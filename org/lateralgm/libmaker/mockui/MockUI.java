@@ -45,6 +45,7 @@ import org.lateralgm.libmaker.backend.Action;
 import org.lateralgm.libmaker.backend.Action.PAction;
 import org.lateralgm.libmaker.backend.Library;
 import org.lateralgm.libmaker.backend.Library.PLibrary;
+import org.lateralgm.libmaker.backend.PropertyMap;
 import org.lateralgm.libmaker.backend.PropertyMap.PropertyListener;
 import org.lateralgm.libmaker.backend.PropertyMap.PropertyUpdateEvent;
 import org.lateralgm.libmaker.components.ListListModel;
@@ -274,7 +275,10 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 		lActions.setSelectedIndex(lib.actions.isEmpty() ? -1 : 0);
 		lib.actions.addListUpdateListener(this);
 		for (Action a : lib.actions)
+			{
 			a.properties.addPropertyListener(PAction.NAME,this);
+			a.properties.addPropertyListener(PAction.KIND,this);
+			}
 		lActions.updateUI();
 		}
 
@@ -334,7 +338,15 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 	@Override
 	public void propertyUpdate(PropertyUpdateEvent<PAction> e)
 		{
-		lActions.updateUI();
+		switch (e.key)
+			{
+			case NAME:
+				lActions.updateUI();
+				break;
+			case KIND:
+				iface.setVisible(e.map.get(PAction.KIND) == Action.Kind.NORMAL);
+				break;
+			}
 		}
 
 	@Override
@@ -342,7 +354,11 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 		{
 		if (evt.type != ListUpdateEvent.Type.ADDED) return;
 		for (int i = evt.fromIndex; i <= evt.toIndex; i++)
-			lib.actions.get(i).properties.addPropertyListener(PAction.NAME,this);
+			{
+			PropertyMap<PAction> prop = lib.actions.get(i).properties;
+			prop.addPropertyListener(PAction.NAME,this);
+			prop.addPropertyListener(PAction.KIND,this);
+			}
 		lActions.updateUI();
 		}
 	}
