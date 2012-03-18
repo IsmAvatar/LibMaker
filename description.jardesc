@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jardesc>
+    <jar path="LibMaker/libmaker.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/LibMaker/description.jardesc" exportErrors="false" exportWarnings="false" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="false" mainClassHandleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker{LibMaker.java[LibMaker" manifestLocation="/LibMaker/META-INF/MANIFEST.MF" manifestVersion="1.0" reuseManifest="true" saveManifest="true" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
+        <javaElement handleIdentifier="=JoshEdit/&lt;org.lateralgm.joshedit"/>
+        <javaElement handleIdentifier="=JoshEdit/&lt;org.lateralgm.joshedit.icons"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.mockui"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.uilink"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.backend"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.components"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.file"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.icons"/>
+        <javaElement handleIdentifier="=JoshEdit/&lt;org.lateralgm.joshedit.icons.actions"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.icons.menu"/>
+        <folder path="/LibMaker/META-INF"/>
+        <file path="/LibMaker/LICENSE"/>
+        <file path="/LibMaker/COPYING"/>
+        <file path="/LibMaker/README"/>
+        <file path="/LibMaker/description.jardesc"/>
+        <file path="/LibMaker/.classpath"/>
+        <file path="/LibMaker/.project"/>
+    </selectedElements>
+</jardesc>
