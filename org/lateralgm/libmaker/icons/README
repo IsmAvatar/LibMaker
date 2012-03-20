@@ -10,9 +10,17 @@ This directory contains the following icons (.png extension omitted):
  Copyright 2011 Josh Ventura <JoshV10@gmail.com>
 
  Nuvola icon theme for KDE 3.x (some icons renamed):
-   accept add copy down help info new
-   open red-x reload save-as save up
+   add down red-x reload up
+   menu/
+     help info new open save-as save
+   toolbar/
+     accept copy cut find paste redo undo
  Copyright 2003-2004 David Vignoni
+
+ Stock icons for OpenOffice.org:
+   toolbar/
+     line-goto
+ Copyright 2003 Novell, Inc.
 
 The icons in this directory are part of LibMaker.
 

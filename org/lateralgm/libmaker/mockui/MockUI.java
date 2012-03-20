@@ -31,19 +31,16 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.lateralgm.joshedit.JoshText;
 import org.lateralgm.libmaker.Messages;
 import org.lateralgm.libmaker.backend.Action;
 import org.lateralgm.libmaker.backend.Action.PAction;
@@ -52,6 +49,7 @@ import org.lateralgm.libmaker.backend.Library.PLibrary;
 import org.lateralgm.libmaker.backend.PropertyMap;
 import org.lateralgm.libmaker.backend.PropertyMap.PropertyListener;
 import org.lateralgm.libmaker.backend.PropertyMap.PropertyUpdateEvent;
+import org.lateralgm.libmaker.code.JoshTextArea;
 import org.lateralgm.libmaker.components.ListListModel;
 import org.lateralgm.libmaker.components.NumberField;
 import org.lateralgm.libmaker.components.ObservableList.ListUpdateEvent;
@@ -214,14 +212,9 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 				}
 			if (s == bCode)
 				{
-				JDialog d = new JDialog((Frame) null,"Initialization Code",true);
-				CodeHolder text = new JoshTextArea();
-				text.setCode((String) lib.get(PLibrary.INIT_CODE));
-				d.add(new JScrollPane(text.getComponent()));
-				d.setSize(500,500);
-				d.setLocationRelativeTo(null);
-				d.setVisible(true);
-				lib.put(PLibrary.INIT_CODE,text.getCode());
+				String code = lib.get(PLibrary.INIT_CODE);
+				code = JoshTextArea.showInDialog((Frame) null,"Initialization Code",code);
+				if (code != null) lib.put(PLibrary.INIT_CODE,code);
 				return;
 				}
 			if (s == bAdd)
@@ -292,66 +285,6 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 			a.properties.addPropertyListener(PAction.KIND,this);
 			}
 		lActions.updateUI();
-		}
-
-	public static class JoshTextArea implements CodeHolder
-		{
-		JoshText t;
-
-		public JoshTextArea()
-			{
-			t = new JoshText();
-			}
-
-		@Override
-		public void setCode(String s)
-			{
-			// TODO Auto-generated method stub
-
-			}
-
-		@Override
-		public String getCode()
-			{
-			// TODO Auto-generated method stub
-			return null;
-			}
-
-		public Component getComponent()
-			{
-			return t;
-			}
-		}
-
-	public static class CodeArea extends JTextArea implements CodeHolder
-		{
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void setCode(String s)
-			{
-			setText(s);
-			}
-
-		@Override
-		public String getCode()
-			{
-			return getText();
-			}
-
-		public Component getComponent()
-			{
-			return this;
-			}
-		}
-
-	public static interface CodeHolder
-		{
-		void setCode(String s);
-
-		String getCode();
-
-		Component getComponent();
 		}
 
 	public static interface ActionPanel
