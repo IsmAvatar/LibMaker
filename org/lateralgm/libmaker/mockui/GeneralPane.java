@@ -9,6 +9,7 @@
 package org.lateralgm.libmaker.mockui;
 
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -27,6 +28,7 @@ import org.lateralgm.libmaker.backend.Action;
 import org.lateralgm.libmaker.backend.Action.Execution;
 import org.lateralgm.libmaker.backend.Action.Kind;
 import org.lateralgm.libmaker.backend.Action.PAction;
+import org.lateralgm.libmaker.code.JoshTextArea;
 import org.lateralgm.libmaker.components.EnumRenderer;
 import org.lateralgm.libmaker.components.NumberField;
 import org.lateralgm.libmaker.file.ImageChooser;
@@ -229,7 +231,9 @@ public class GeneralPane extends GroupPanel implements ActionPanel,ActionListene
 			}
 		if (src == bExecCode)
 			{
-			//TODO: Execution Code
+			String code = a.get(PAction.EXEC_INFO);
+			code = JoshTextArea.showInDialog((Frame) null,"Execution Code",code);
+			if (code != null) a.put(PAction.EXEC_INFO,code);
 			return;
 			}
 		}

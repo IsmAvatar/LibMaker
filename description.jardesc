@@ -13,15 +13,17 @@
     <selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
         <javaElement handleIdentifier="=JoshEdit/&lt;org.lateralgm.joshedit"/>
         <javaElement handleIdentifier="=JoshEdit/&lt;org.lateralgm.joshedit.icons"/>
+        <javaElement handleIdentifier="=JoshEdit/&lt;org.lateralgm.joshedit.icons.actions"/>
         <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.code"/>
         <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.mockui"/>
         <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.uilink"/>
         <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.backend"/>
         <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.components"/>
         <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.file"/>
         <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.icons"/>
-        <javaElement handleIdentifier="=JoshEdit/&lt;org.lateralgm.joshedit.icons.actions"/>
         <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.icons.menu"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.icons.toolbar"/>
         <folder path="/LibMaker/META-INF"/>
         <file path="/LibMaker/LICENSE"/>
         <file path="/LibMaker/COPYING"/>
