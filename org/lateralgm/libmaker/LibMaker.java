@@ -25,6 +25,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -36,8 +38,18 @@ import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 import javax.swing.UIManager;
 
+import org.lateralgm.libmaker.backend.Action;
+import org.lateralgm.libmaker.backend.Action.PAction;
+import org.lateralgm.libmaker.backend.Argument;
+import org.lateralgm.libmaker.backend.Argument.PArgument;
 import org.lateralgm.libmaker.backend.Library;
+import org.lateralgm.libmaker.backend.Library.PLibrary;
+import org.lateralgm.libmaker.backend.PropertyMap;
+import org.lateralgm.libmaker.backend.PropertyMap.PropertyListener;
+import org.lateralgm.libmaker.backend.PropertyMap.PropertyUpdateEvent;
 import org.lateralgm.libmaker.components.GmMenu;
+import org.lateralgm.libmaker.components.ObservableList.ListUpdateEvent;
+import org.lateralgm.libmaker.components.ObservableList.ListUpdateListener;
 import org.lateralgm.libmaker.file.FileChooser;
 import org.lateralgm.libmaker.mockui.MockUI;
 
@@ -48,6 +60,7 @@ public class LibMaker extends JFrame implements ActionListener
 	protected FileChooser fc;
 	protected MockUI ui;
 	protected Library currentLib;
+	protected ChangeListener cl;
 	protected boolean modified;
 
 	public LibMaker()
@@ -140,10 +153,71 @@ public class LibMaker extends JFrame implements ActionListener
 
 	public void setLibrary(Library lib)
 		{
+		if (cl != null) cl.dispose();
 		currentLib = lib;
 		modified = false;
 		ui.setLibrary(lib);
 		setTitleFile(lib.sourceFile);
+		//cl = new ChangeListener(lib);
+		}
+
+	class ChangeListener implements ListUpdateListener
+		{
+		Library lib;
+		List<MyPropList<?>> lists = new LinkedList<MyPropList<?>>();
+
+		public ChangeListener(Library lib)
+			{
+			this.lib = lib;
+			lib.actions.addListUpdateListener(this);
+			lists.add(new MyPropList<PLibrary>(lib.properties));
+			for (Action a : lib.actions)
+				{
+				lists.add(new MyPropList<PAction>(a.properties));
+				for (Argument arg : a.arguments)
+					lists.add(new MyPropList<PArgument>(arg.properties));
+				}
+			}
+
+		public void dispose()
+			{
+			lib.actions.removeListUpdateListener(this);
+			for (MyPropList<?> mpl : lists)
+				mpl.dispose();
+			}
+
+		public void fire()
+			{
+			setModified(true);
+			}
+
+		class MyPropList<K extends Enum<K>> implements PropertyListener<K>
+			{
+			protected PropertyMap<K> map;
+
+			public MyPropList(PropertyMap<K> map)
+				{
+				this.map = map;
+				map.addPropertyListener(this);
+				}
+
+			public void dispose()
+				{
+				map.removePropertyListener(this);
+				}
+
+			@Override
+			public void propertyUpdate(PropertyUpdateEvent<K> evt)
+				{
+				fire();
+				}
+			}
+
+		@Override
+		public void listUpdate(ListUpdateEvent evt)
+			{
+			fire();
+			}
 		}
 
 	public void setModified(boolean mod)

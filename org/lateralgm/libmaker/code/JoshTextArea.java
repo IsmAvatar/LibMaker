@@ -177,6 +177,9 @@ public class JoshTextArea extends JoshTextPanel
 		d.pack();
 		d.setLocationRelativeTo(null);
 		d.setVisible(true);
+
+		//return
+		if (code == null || code.equals(rc)) return null;
 		return rc;
 		}
 	}
