@@ -28,6 +28,8 @@ import org.lateralgm.libmaker.backend.Action.PAction;
 import org.lateralgm.libmaker.backend.Argument;
 import org.lateralgm.libmaker.backend.Argument.PArgument;
 import org.lateralgm.libmaker.backend.Library;
+import org.lateralgm.libmaker.backend.Library.LglFormat;
+import org.lateralgm.libmaker.backend.Library.LibFormat;
 import org.lateralgm.libmaker.backend.Library.PLibrary;
 import org.lateralgm.libmaker.backend.PropertyMap;
 
@@ -76,7 +78,9 @@ public class LibReader
 		{
 		try
 			{
-			return loadFile(new GmStreamDecoder(f),f.getName());
+			Library lib = loadFile(new GmStreamDecoder(f),f.getName());
+			lib.sourceFile = f;
+			return lib;
 			}
 		catch (FileNotFoundException e)
 			{
@@ -98,9 +102,15 @@ public class LibReader
 			{
 			int header = in.read3();
 			if (header == (('L' << 16) | ('G' << 8) | 'L'))
+				{
 				lib = loadLgl(in);
+				lib.format = new LglFormat(6);
+				}
 			else if (header == 500 || header == 520)
+				{
 				lib = loadLib(in);
+				lib.format = header == 520 ? LibFormat.LIB520 : LibFormat.LIB500;
+				}
 			else
 				throw new LibFormatException(Messages.format("LibReader.ERROR_INVALIDFILE",filename)); //$NON-NLS-1$
 			}
