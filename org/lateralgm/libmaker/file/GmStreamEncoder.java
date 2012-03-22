@@ -54,6 +54,11 @@ public class GmStreamEncoder extends StreamEncoder
 
 	public void writeStr(String str) throws IOException
 		{
+		if (str == null)
+			{
+			write4(0);
+			return;
+			}
 		byte[] encoded = str.getBytes(charset);
 		write4(encoded.length);
 		write(encoded);
@@ -61,6 +66,11 @@ public class GmStreamEncoder extends StreamEncoder
 
 	public void writeStr1(String str) throws IOException
 		{
+		if (str == null)
+			{
+			write(0);
+			return;
+			}
 		byte[] encoded = str.getBytes(charset);
 		int writeSize = Math.min(encoded.length,255);
 		write(writeSize);
