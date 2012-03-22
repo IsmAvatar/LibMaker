@@ -37,14 +37,20 @@ public abstract class PropertyLink<K extends Enum<K>, V>
 		reset();
 		}
 
+	/** This prevents updates from firing while the component is being reset */
+	protected boolean resetting;
+
 	protected void reset()
 		{
+		resetting = true;
 		V v = map.get(key);
 		setComponent(v);
+		resetting = false;
 		}
 
 	protected void editProperty(Object v)
 		{
+		if (resetting) return; //don't need to inform map, since our value was just set from the map.
 		if (map != null) map.put(key,v);
 		}
 

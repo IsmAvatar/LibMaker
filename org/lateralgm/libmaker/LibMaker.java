@@ -158,7 +158,7 @@ public class LibMaker extends JFrame implements ActionListener
 		modified = false;
 		ui.setLibrary(lib);
 		setTitleFile(lib.sourceFile);
-		//cl = new ChangeListener(lib);
+		cl = new ChangeListener(lib);
 		}
 
 	class ChangeListener implements ListUpdateListener
