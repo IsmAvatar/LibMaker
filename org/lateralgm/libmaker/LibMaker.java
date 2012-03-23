@@ -49,6 +49,7 @@ import org.lateralgm.libmaker.backend.Library.PLibrary;
 import org.lateralgm.libmaker.backend.PropertyMap;
 import org.lateralgm.libmaker.backend.PropertyMap.PropertyListener;
 import org.lateralgm.libmaker.backend.PropertyMap.PropertyUpdateEvent;
+import org.lateralgm.libmaker.components.AboutBox;
 import org.lateralgm.libmaker.components.GmMenu;
 import org.lateralgm.libmaker.components.ObservableList.ListUpdateEvent;
 import org.lateralgm.libmaker.components.ObservableList.ListUpdateListener;
@@ -316,8 +317,16 @@ public class LibMaker extends JFrame implements ActionListener
 			System.exit(0);
 			return;
 			}
-
-		//TODO: Help and About
+		if (cmd.endsWith(".ABOUT")) //$NON-NLS-1$
+			{
+			new AboutBox(this).setVisible(true);
+			return;
+			}
+		if (cmd.endsWith(".HELP")) //$NON-NLS-1$
+			{
+			//TODO: Help
+			return;
+			}
 		}
 
 	public static void main(String[] args)
