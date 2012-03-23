@@ -36,13 +36,14 @@ import org.lateralgm.libmaker.mockui.MockUI.ActionPanel;
 import org.lateralgm.libmaker.mockui.MockUI.GroupPanel;
 import org.lateralgm.libmaker.uilink.PropertyLink.PLFactory;
 
-public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListener
+public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListener,ActionListener
 	{
 	private static final long serialVersionUID = 1L;
 
 	PLFactory<PAction> plf;
 	JComboBox dKind;
 	JCheckBox cbQuestion, cbApply, cbRelative;
+	JLabel lArgNum; //so we can toggle its visibility
 	JSpinner sArgNum;
 	SpinnerNumberModel smArgNum;
 	ArgumentInfo args[];
@@ -100,6 +101,7 @@ public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListe
 
 		dKind = new JComboBox(InterfaceKind.values());
 		dKind.setRenderer(new EnumRenderer("ActionIfaceKind.")); //$NON-NLS-1$
+		dKind.addActionListener(this);
 		plf.make(dKind,PAction.IFACE_KIND);
 
 		cbQuestion = new JCheckBox(Messages.getString("InterfacePane.QUESTION")); //$NON-NLS-1$
@@ -108,6 +110,8 @@ public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListe
 		plf.make(cbQuestion,PAction.QUESTION);
 		plf.make(cbApply,PAction.APPLY);
 		plf.make(cbRelative,PAction.RELATIVE);
+
+		lArgNum = new JLabel(Messages.getString("InterfacePane.ARG_COUNT")); //$NON-NLS-1$
 
 		smArgNum = new SpinnerNumberModel(Action.MAX_ARGS,0,Action.MAX_ARGS,1); //so all arguments are initially visible
 		smArgNum.addChangeListener(this);
@@ -133,7 +137,6 @@ public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListe
 		initKeyComponents();
 
 		JLabel lKind = new JLabel(Messages.getString("InterfacePane.KIND")); //$NON-NLS-1$
-		JLabel lArgNum = new JLabel(Messages.getString("InterfacePane.ARG_COUNT")); //$NON-NLS-1$
 
 		ParallelGroup hgC1 = layout.createParallelGroup();
 		ParallelGroup hgC2 = layout.createParallelGroup();
@@ -201,8 +204,22 @@ public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListe
 	@Override
 	public void stateChanged(ChangeEvent e)
 		{
+		recalculateArgsVisibility();
+		}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+		{
+		recalculateArgsVisibility();
+		}
+
+	protected void recalculateArgsVisibility()
+		{
+		boolean showArgs = dKind.getSelectedItem() == InterfaceKind.NORMAL;
 		int argNum = smArgNum.getNumber().intValue();
+		lArgNum.setVisible(showArgs);
+		sArgNum.setVisible(showArgs);
 		for (int arg = 0; arg < Action.MAX_ARGS; arg++)
-			args[arg].setVisible(arg < argNum);
+			args[arg].setVisible(showArgs && arg < argNum);
 		}
 	}
