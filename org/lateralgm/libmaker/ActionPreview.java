@@ -7,7 +7,7 @@
  * See LICENSE for details.
  */
 
-package org.lateralgm.libmaker.mockui;
+package org.lateralgm.libmaker;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -47,7 +47,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
-import org.lateralgm.libmaker.Messages;
 import org.lateralgm.libmaker.backend.Action;
 import org.lateralgm.libmaker.backend.Action.PAction;
 import org.lateralgm.libmaker.backend.Argument;
@@ -66,7 +65,7 @@ public class ActionPreview extends JInternalFrame implements ActionListener
 	private JButton save;
 	private JButton discard;
 
-	public static void showInFrame(Action a)
+	public static void showInFrame(Component parent, Action a)
 		{
 		final JFrame f = new JFrame();
 		ActionPreview ap = new ActionPreview(a);
@@ -82,7 +81,7 @@ public class ActionPreview extends JInternalFrame implements ActionListener
 		dp.add(ap);
 		f.add(dp);
 		f.setSize(ap.getSize());
-		f.setLocationRelativeTo(null);
+		f.setLocationRelativeTo(parent);
 		f.setVisible(true);
 		}
 

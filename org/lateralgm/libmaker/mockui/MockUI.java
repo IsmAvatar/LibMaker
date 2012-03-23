@@ -33,6 +33,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -41,6 +42,7 @@ import javax.swing.LayoutStyle;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.lateralgm.libmaker.ActionPreview;
 import org.lateralgm.libmaker.Messages;
 import org.lateralgm.libmaker.backend.Action;
 import org.lateralgm.libmaker.backend.Action.PAction;
@@ -118,6 +120,7 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 							boolean isSelected, boolean cellHasFocus)
 						{
 						if (value instanceof Action) value = ((Action) value).get(PAction.NAME);
+						//TODO: render the icon, too
 						return super.getListCellRendererComponent(list,value,index,isSelected,cellHasFocus);
 						}
 				});
@@ -270,6 +273,17 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 		p.add(iface);
 
 		return p;
+		}
+
+	public void previewSelectedAction(Frame parent)
+		{
+		Object o = lActions.getSelectedValue();
+		if (o == null || !(o instanceof Action))
+			{
+			JOptionPane.showMessageDialog(parent,Messages.getString("ActionPreview.NO_ACTION"));
+			return;
+			}
+		ActionPreview.showInFrame(parent,(Action) o);
 		}
 
 	public void setLibrary(Library lib)

@@ -30,6 +30,7 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -138,6 +139,9 @@ public class LibMaker extends JFrame implements ActionListener
 		addToolItem(tb,"Tool.SAVEAS"); //$NON-NLS-1$
 		tb.addSeparator();
 		addToolItem(tb,"Tool.MANUAL"); //$NON-NLS-1$
+
+		tb.add(Box.createHorizontalGlue()); //right align after this
+		addToolItem(tb,"Tool.PREVIEW"); //$NON-NLS-1$
 
 		return tb;
 		}
@@ -325,6 +329,11 @@ public class LibMaker extends JFrame implements ActionListener
 		if (cmd.endsWith(".HELP")) //$NON-NLS-1$
 			{
 			//TODO: Help
+			return;
+			}
+		if (cmd.endsWith(".PREVIEW")) //$NON-NLS-1$
+			{
+			ui.previewSelectedAction(this);
 			return;
 			}
 		}

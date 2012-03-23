@@ -26,6 +26,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -37,7 +38,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
-import org.lateralgm.joshedit.JoshText.CustomAction;
 import org.lateralgm.joshedit.Runner.JoshTextPanel;
 import org.lateralgm.libmaker.Messages;
 import org.lateralgm.libmaker.components.NumberField;
@@ -72,7 +72,7 @@ public class JoshTextArea extends JoshTextPanel
 		tb.add(makeToolbarButton(text.aPaste));
 		}
 
-	CustomAction gotoAction = new CustomAction("GOTO")
+	AbstractAction gotoAction = new AbstractAction("GOTO")
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -141,7 +141,7 @@ public class JoshTextArea extends JoshTextPanel
 
 		JToolBar tool = new JToolBar();
 		tool.setFloatable(false);
-		tool.add(makeToolbarButton(new CustomAction("OK")
+		tool.add(makeToolbarButton(new AbstractAction("OK")
 			{
 				private static final long serialVersionUID = 1L;
 
