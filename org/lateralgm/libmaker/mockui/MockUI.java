@@ -24,11 +24,13 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -48,7 +50,6 @@ import org.lateralgm.libmaker.backend.Action;
 import org.lateralgm.libmaker.backend.Action.PAction;
 import org.lateralgm.libmaker.backend.Library;
 import org.lateralgm.libmaker.backend.Library.PLibrary;
-import org.lateralgm.libmaker.backend.PropertyMap;
 import org.lateralgm.libmaker.backend.PropertyMap.PropertyListener;
 import org.lateralgm.libmaker.backend.PropertyMap.PropertyUpdateEvent;
 import org.lateralgm.libmaker.code.JoshTextArea;
@@ -112,18 +113,7 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 			plf.make(cbAdvanced,PLibrary.ADVANCED);
 
 			lActions = new JList(mActions = new ListListModel<Action>());
-			lActions.setCellRenderer(new DefaultListCellRenderer()
-				{
-					private static final long serialVersionUID = 1L;
-
-					public Component getListCellRendererComponent(JList list, Object value, int index,
-							boolean isSelected, boolean cellHasFocus)
-						{
-						if (value instanceof Action) value = ((Action) value).get(PAction.NAME);
-						//TODO: render the icon, too
-						return super.getListCellRendererComponent(list,value,index,isSelected,cellHasFocus);
-						}
-				});
+			lActions.setCellRenderer(new ActionListCellRenderer());
 			//Prototype only used for size calculation, so it doesn't need translating
 			lActions.setPrototypeCellValue("Sample Action Cell"); //$NON-NLS-1$
 			lActions.setSelectionModel(new SingleListSelectionModel());
@@ -294,11 +284,31 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 		lActions.setSelectedIndex(lib.actions.isEmpty() ? -1 : 0);
 		lib.actions.addListUpdateListener(this);
 		for (Action a : lib.actions)
-			{
-			a.properties.addPropertyListener(PAction.NAME,this);
-			a.properties.addPropertyListener(PAction.KIND,this);
-			}
+			a.properties.addPropertyListener(this);
 		lActions.updateUI();
+		}
+
+	protected static class ActionListCellRenderer extends DefaultListCellRenderer
+		{
+		private static final long serialVersionUID = 1L;
+
+		public Component getListCellRendererComponent(JList list, Object value, int index,
+				boolean isSelected, boolean cellHasFocus)
+			{
+			//Handle non-actions the default way
+			if (!(value instanceof Action))
+				return super.getListCellRendererComponent(list,value,index,isSelected,cellHasFocus);
+			//instead of toString, use our NAME
+			Action act = ((Action) value);
+			value = act.get(PAction.NAME);
+			//generate the label
+			Component r = super.getListCellRendererComponent(list,value,index,isSelected,cellHasFocus);
+			//apply our icon (currently, we do this by regenerating an icon each time)
+			BufferedImage tile = act.get(PAction.IMAGE);
+			if (tile != null)
+				setIcon(new ImageIcon(tile.getSubimage(0,0,24,24).getScaledInstance(16,16,0)));
+			return r;
+			}
 		}
 
 	public static interface ActionPanel
@@ -360,6 +370,7 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 		{
 		switch (e.key)
 			{
+			case IMAGE:
 			case NAME:
 				lActions.updateUI();
 				break;
@@ -374,11 +385,7 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 		{
 		if (evt.type != ListUpdateEvent.Type.ADDED) return;
 		for (int i = evt.fromIndex; i <= evt.toIndex; i++)
-			{
-			PropertyMap<PAction> prop = lib.actions.get(i).properties;
-			prop.addPropertyListener(PAction.NAME,this);
-			prop.addPropertyListener(PAction.KIND,this);
-			}
+			lib.actions.get(i).properties.addPropertyListener(this);
 		lActions.updateUI();
 		}
 	}
