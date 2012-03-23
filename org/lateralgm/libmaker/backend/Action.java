@@ -32,7 +32,6 @@ public class Action
 		}
 
 	public static int MAX_ARGS = 6;
-	private static int lastId = 1;
 	private static final BufferedImage DEFAULT_TILE = Messages.getImageForKey("Action.DEFAULT_TILE"); //$NON-NLS-1$
 
 	public enum PAction
@@ -54,7 +53,7 @@ public class Action
 
 	public Action()
 		{
-		int id = lastId++;
+		int id = Library.lastActionId++;
 		properties.put(PAction.ID,id);
 		properties.put(PAction.NAME,"Action " + id);
 

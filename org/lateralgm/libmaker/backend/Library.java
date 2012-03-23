@@ -79,6 +79,8 @@ public class Library
 	public Format format;
 	public ObservableList<Action> actions = new ActiveArrayList<Action>();
 
+	/*package*/static int lastActionId; //only accessible to Action
+
 	public enum PLibrary
 		{
 		CAPTION,ID,AUTHOR,VERSION,CHANGED,INFO,INIT_CODE,ADVANCED
@@ -91,6 +93,7 @@ public class Library
 
 	public Library()
 		{
+		lastActionId = 1;
 		put(PLibrary.ID,randomId());
 		put(PLibrary.CHANGED,longTimeToGmTime(System.currentTimeMillis()));
 		}
