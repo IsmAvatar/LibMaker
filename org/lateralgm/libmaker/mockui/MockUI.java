@@ -351,9 +351,9 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 			control.bDown.setEnabled(hasSelection);
 
 			general.setVisible(hasSelection);
-			iface.setVisible(hasSelection
-					&& ((Action) v).properties.get(PAction.KIND) == Action.Kind.NORMAL);
 			}
+		iface.setVisible(hasSelection
+				&& ((Action) v).properties.get(PAction.KIND) == Action.Kind.NORMAL);
 		if (!hasSelection) return;
 
 		int ind = lActions.getSelectedIndex();
