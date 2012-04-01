@@ -15,12 +15,11 @@ import javax.swing.event.ListSelectionListener;
 
 /**
  * Lightweight single-selection data model for list selections.
+ * Generally this behaves like DefaultListSelectionModel.SINGLE_SELECTION.
  * Unlike DefaultListSelectionModel, this will also fire
  * valueChanged(ListSelectionEvent) when the selection is cleared,
  * making this especially useful for dynamic lists.
- * 
- * Most of the methods will throw an exception if you try
- * to use them in a non-single-selection kind of way.
+ * Note that clearing an already cleared selection will still fire.
  * 
  * @author ismavatar
  */
@@ -45,16 +44,19 @@ public class SingleListSelectionModel implements ListSelectionModel
 	@Override
 	public void setSelectionInterval(int index0, int index1)
 		{
-		if (index0 != index1) throw new IllegalArgumentException(index0 + " != " + index1); //$NON-NLS-1$
-		setSelectedIndex(index0);
+		setSelectedIndex(index1);
+		}
+
+	@Override
+	public void addSelectionInterval(int index0, int index1)
+		{
+		setSelectionInterval(index0,index1);
 		}
 
 	@Override
 	public void removeSelectionInterval(int index0, int index1)
 		{
-		if (index0 != index1) throw new IllegalArgumentException(index0 + " != " + index1); //$NON-NLS-1$
-		if (index0 != sel) throw new UnsupportedOperationException(sel + " - " + index0); //$NON-NLS-1$
-		setSelectedIndex(-1);
+		if (sel >= Math.min(index0,index1) && sel <= Math.max(index0,index1)) setSelectedIndex(-1);
 		}
 
 	@Override
@@ -137,6 +139,7 @@ public class SingleListSelectionModel implements ListSelectionModel
 
 	protected void fire(int oldSel)
 		{
+		if (sel != -1 && oldSel == sel) return;
 		int first = oldSel;
 		int last = sel;
 		if (first > last)
@@ -157,12 +160,6 @@ public class SingleListSelectionModel implements ListSelectionModel
 		}
 
 	//Unsupported methods
-	@Override
-	public void addSelectionInterval(int index0, int index1)
-		{
-		throw new UnsupportedOperationException();
-		}
-
 	@Override
 	public void setAnchorSelectionIndex(int index)
 		{
