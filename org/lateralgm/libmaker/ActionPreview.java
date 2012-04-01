@@ -354,8 +354,11 @@ public class ActionPreview extends JInternalFrame implements ActionListener
 				{
 				try
 					{
-					String val = arg.get(PArgument.DEF_VALUE);
-					((JComboBox) editor).setSelectedIndex(Integer.parseInt(val));
+					int val = Integer.parseInt((String) arg.get(PArgument.DEF_VALUE));
+					JComboBox cb = (JComboBox) editor;
+					if (val < 0 || val >= cb.getItemCount()) val = 0;
+					if (cb.getItemCount() == 0) val = -1;
+					((JComboBox) editor).setSelectedIndex(val);
 					}
 				catch (NumberFormatException e)
 					{
