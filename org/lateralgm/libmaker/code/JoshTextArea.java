@@ -38,6 +38,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
+import org.lateralgm.joshedit.DefaultTokenMarker;
+import org.lateralgm.joshedit.GMLTokenMarker;
 import org.lateralgm.joshedit.Runner.JoshTextPanel;
 import org.lateralgm.libmaker.Messages;
 import org.lateralgm.libmaker.components.NumberField;
@@ -46,9 +48,20 @@ public class JoshTextArea extends JoshTextPanel
 	{
 	private static final long serialVersionUID = 1L;
 
+	protected DefaultTokenMarker gmlTokenMarker = new GMLTokenMarker();
+
 	JoshTextArea(String code)
 		{
 		super(code);
+
+		//		setTabSize(Prefs.tabSize);
+		setTokenMarker(gmlTokenMarker);
+		setupKeywords();
+		updateKeywords();
+		//		text.setFont(Prefs.codeFont);
+		//painter.setStyles(PrefsStore.getSyntaxStyles());
+		//		text.getActionMap().put("COMPLETIONS",completionAction);
+		//		LGM.currentFile.updateSource.addListener(this);
 		}
 
 	private static JButton makeToolbarButton(Action a)
@@ -125,6 +138,55 @@ public class JoshTextArea extends JoshTextPanel
 
 		return f.getIntValue();
 		}
+
+	private void setupKeywords()
+		{
+		gmlTokenMarker.tmKeywords.add(GmlSyntax.functions);
+		gmlTokenMarker.tmKeywords.add(GmlSyntax.constructs);
+		gmlTokenMarker.tmKeywords.add(GmlSyntax.operators);
+		gmlTokenMarker.tmKeywords.add(GmlSyntax.constants);
+		gmlTokenMarker.tmKeywords.add(GmlSyntax.variables);
+		}
+
+	public static void updateKeywords()
+		{
+		GmlSyntax.constructs.words.clear();
+		GmlSyntax.operators.words.clear();
+		GmlSyntax.constants.words.clear();
+		GmlSyntax.variables.words.clear();
+		GmlSyntax.functions.words.clear();
+
+		for (GmlSyntax.Construct keyword : GmlSyntax.CONSTRUCTS)
+			GmlSyntax.constructs.words.add(keyword.getName());
+		for (GmlSyntax.Operator keyword : GmlSyntax.OPERATORS)
+			GmlSyntax.operators.words.add(keyword.getName());
+		for (GmlSyntax.Constant keyword : GmlSyntax.CONSTANTS)
+			GmlSyntax.constants.words.add(keyword.getName());
+		for (GmlSyntax.Variable keyword : GmlSyntax.VARIABLES)
+			GmlSyntax.variables.words.add(keyword.getName());
+		for (GmlSyntax.Function keyword : GmlSyntax.FUNCTIONS)
+			GmlSyntax.functions.words.add(keyword.getName());
+		}
+
+/*	protected void updateCompletions()
+		{
+		int l = 0;
+		for (GmlSyntax.Keyword[] a : GmlSyntax.GML_KEYWORDS)
+			l += a.length;
+		completions = new Completion[l];
+		int i = 0;
+		for (GmlSyntax.Keyword[] a : GmlSyntax.GML_KEYWORDS)
+			for (GmlSyntax.Keyword k : a)
+				{
+				if (k instanceof GmlSyntax.Function)
+					completions[i] = new FunctionCompletion((GmlSyntax.Function) k);
+				else if (k instanceof GmlSyntax.Variable)
+					completions[i] = new VariableCompletion((GmlSyntax.Variable) k);
+				else
+					completions[i] = new CompletionMenu.WordCompletion(k.getName());
+				i++;
+				}
+		}*/
 
 	static String rc;
 
