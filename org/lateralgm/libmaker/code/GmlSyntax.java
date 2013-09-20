@@ -11,7 +11,9 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.lateralgm.joshedit.DefaultTokenMarker.KeywordSet;
+import org.lateralgm.joshedit.TokenMarker;
+import org.lateralgm.joshedit.lexers.DefaultTokenMarker;
+import org.lateralgm.joshedit.lexers.DefaultTokenMarker.KeywordSet;
 
 public class GmlSyntax
 	{
@@ -25,21 +27,53 @@ public class GmlSyntax
 
 	private static final Color BROWN = new Color(128,0,0);
 	private static final Color FUNCTION = new Color(0,0,128);
+	
+	/** True if this is in general a case sensitive language. */
+	public static boolean caseSensitive = true; // Most are.
 
 	static KeywordSet constructs, functions, operators, constants, variables;
+	
+	/** All keyword sets to mark. */
+	public static ArrayList<KeywordSet> tmKeywords = new ArrayList<KeywordSet>();
 
 	static
 		{
 		populateFunctions();
 		populateKeywords();
 
-		functions = new KeywordSet("Functions",FUNCTION,Font.PLAIN);
-		constructs = new KeywordSet("Constructs",Color.BLACK,Font.BOLD);
-		operators = new KeywordSet("Operators",Color.BLACK,Font.BOLD);
-		constants = new KeywordSet("Constants",BROWN,Font.PLAIN);
-		variables = new KeywordSet("Variables",Color.BLUE,Font.ITALIC);
+		functions = addKeywordSet("Functions",FUNCTION,Font.PLAIN);
+		constructs = addKeywordSet("Constructs",Color.BLACK,Font.BOLD);
+		operators = addKeywordSet("Operators",Color.BLACK,Font.BOLD);
+		constants = addKeywordSet("Constants",BROWN,Font.PLAIN);
+		variables = addKeywordSet("Variables",Color.BLUE,Font.ITALIC);
 		}
 
+	/** Adds a new keyword set with some basic information. Uses global case-sensitivity.
+	 * @param groupName The name of this group, for preferences purposes.
+	 * @param markColor The font color with which keywords in this group are rendered.
+	 * @param fontStyle The font style with which keywords in this group are rendered.
+	 * @return The new keyword set, so you can populate it.
+	 */
+	public static KeywordSet addKeywordSet(String groupName, Color markColor, int fontStyle)
+	{
+		return addKeywordSet(groupName,markColor,fontStyle,caseSensitive);
+	}
+	
+	/** Adds a new keyword set with some basic information and specified case-sensitivity.
+	 * @param groupName The name of this group, for preferences purposes.
+	 * @param markColor The font color with which keywords in this group are rendered.
+	 * @param fontStyle The font style with which keywords in this group are rendered.
+	 * @param caseSensitiveTK Whether or not this keyword set should be matched with case sensitivity.
+	 * @return The new keyword set, so you can populate it.
+	 */
+	public static KeywordSet addKeywordSet(String groupName, Color markColor, int fontStyle,
+			boolean caseSensitiveTK)
+	{
+		KeywordSet ks = new KeywordSet(groupName,markColor,fontStyle,caseSensitiveTK);
+		tmKeywords.add(ks);
+		return ks;
+	}
+	
 	private static void populateFunctions()
 		{
 		final String fn2 = "functions.txt";

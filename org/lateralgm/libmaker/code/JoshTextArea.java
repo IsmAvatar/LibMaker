@@ -33,16 +33,18 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
-import org.lateralgm.joshedit.DefaultTokenMarker;
-import org.lateralgm.joshedit.GMLTokenMarker;
+import org.lateralgm.joshedit.lexers.DefaultTokenMarker;
+import org.lateralgm.joshedit.lexers.GMLTokenMarker;
 import org.lateralgm.joshedit.Runner.JoshTextPanel;
 import org.lateralgm.libmaker.Messages;
 import org.lateralgm.libmaker.components.NumberField;
+import org.lateralgm.main.LGM;
 
 public class JoshTextArea extends JoshTextPanel
 	{
@@ -64,25 +66,53 @@ public class JoshTextArea extends JoshTextPanel
 		//		LGM.currentFile.updateSource.addListener(this);
 		}
 
-	private static JButton makeToolbarButton(Action a)
-		{
-		String key = "JoshText." + a.getValue(Action.NAME);
-		JButton b = new JButton(Messages.getIconForKey(key));
+	private JButton makeToolbarButton(String name)
+	{
+		String key = "JoshText." + name;
+		JButton b = new JButton(LGM.getIconForKey(key));
 		b.setToolTipText(Messages.getString(key));
+		b.setRequestFocusEnabled(false);
+		b.setActionCommand(key);
+		//b.addActionListener(this);
+		return b;
+	}
+	
+	private static JButton makeToolbarButton(Action a)
+	{
+	String key = "JoshText." + a.getValue(Action.NAME);
+	JButton b = new JButton(Messages.getIconForKey(key));
+	b.setToolTipText(Messages.getString(key));
+	b.setRequestFocusEnabled(false);
+	b.addActionListener(a);
+	return b;
+	}
+
+	private static JMenuItem makeContextButton(Action a)
+	{
+		String key = "JoshText." + a.getValue(Action.NAME);
+		JMenuItem b = new JMenuItem(a);
+		b.setIcon(LGM.getIconForKey(key));
+		b.setText(Messages.getString(key));
 		b.setRequestFocusEnabled(false);
 		b.addActionListener(a);
 		return b;
-		}
+	}
 
 	private void addEditorButtons(JToolBar tb)
 		{
-		tb.add(makeToolbarButton(text.aUndo));
-		tb.add(makeToolbarButton(text.aRedo));
-		tb.add(makeToolbarButton(gotoAction));
+		tb.add(makeToolbarButton("SAVE"));
+		tb.add(makeToolbarButton("LOAD"));
+		tb.add(makeToolbarButton("PRINT"));
 		tb.addSeparator();
-		tb.add(makeToolbarButton(text.aCut));
-		tb.add(makeToolbarButton(text.aCopy));
-		tb.add(makeToolbarButton(text.aPaste));
+		tb.add(makeToolbarButton("UNDO"));
+		tb.add(makeToolbarButton("REDO"));
+		tb.addSeparator();
+		tb.add(makeToolbarButton("FIND"));
+		tb.add(makeToolbarButton("GOTO"));
+		tb.addSeparator();
+		tb.add(makeToolbarButton("CUT"));
+		tb.add(makeToolbarButton("COPY"));
+		tb.add(makeToolbarButton("PASTE"));
 		}
 
 	AbstractAction gotoAction = new AbstractAction("GOTO")
