@@ -33,7 +33,6 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -85,17 +84,6 @@ public class JoshTextArea extends JoshTextPanel
 	b.setRequestFocusEnabled(false);
 	b.addActionListener(a);
 	return b;
-	}
-
-	private static JMenuItem makeContextButton(Action a)
-	{
-		String key = "JoshText." + a.getValue(Action.NAME);
-		JMenuItem b = new JMenuItem(a);
-		b.setIcon(LGM.getIconForKey(key));
-		b.setText(Messages.getString(key));
-		b.setRequestFocusEnabled(false);
-		b.addActionListener(a);
-		return b;
 	}
 
 	private void addEditorButtons(JToolBar tb)
