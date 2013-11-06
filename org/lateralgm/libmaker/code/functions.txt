@@ -103,6 +103,9 @@ user_uuid,ad_app_key
 ads_set_reward_callback 
 placement
 
+ansi_char
+byte
+
 array_height_2d
 array,n
 
@@ -124,8 +127,119 @@ y,x
 arctan
 x
 
+audio_system
+none
+
+audio_exists
+index
+
+audio_get_type
+index
+
+audio_play_music
+index,loop
+
+audio_pause_music
+none
+
+audio_stop_music
+none
+
+audio_play_sound
+index,priority,loop
+
+audio_play_sound_at
+index,x,y,z,falloff_ref,falloff_max,falloff_factor,loop,priority
+
+audio_pause_sound
+index
+
+audio_pause_all
+none
+
+audio_resume_sound
+index
+
+audio_resume_music
+none
+
+audio_resume_all
+none
+
+audio_stop_sound
+index
+
+audio_stop_all
+none
+
+audio_is_playing
+index
+
+audio_music_is_playing
+none
+
+audio_sound_length
+index
+
+audio_sound_pitch
+index,pitch
+
+audio_falloff_set_model
+model
+
+audio_music_gain
+volume,time
+
+audio_sound_gain
+index,volume,time
+
+audio_master_gain
+gain
+
+audio_channel_num
+num
+
+audio_emitter_create
+none
+
+audio_emitter_exists
+ind
+
+audio_emitter_position
+ind,x,y,z
+
+audio_emitter_velocity
+ind,vx,vy,vz
+
+audio_emitter_falloff
+ind,ref,max,factor
+
+audio_emitter_gain
+ind,gain
+
+audio_emitter_pitch
+ind,pitch
+
+audio_emitter_free
+ind
+
+audio_play_sound_on
+ind,sound,loop,priority
+
+audio_listener_position
+x,y,z
+
+audio_listener_velocity
+vx,vy,vz
+
+audio_listener_orientation
+lookat_x,lookat_y,lookat_z,up_x,up_y,up_z
+
 background_add_alpha
 fname,preload
+
+background_add
+fname,transparent,smooth
 
 background_add
 fname,transparent,smooth,preload
@@ -134,13 +248,25 @@ background_assign
 ind,back
 
 background_create_color
+w,h,col
+
+background_create_color
 w,h,col,preload
+
+background_create_from_screen
+x,y,w,h,transparent,smooth
 
 background_create_from_screen
 x,y,w,h,transparent,smooth,preload
 
 background_create_from_surface
+id,x,y,w,h,transparent,smooth
+
+background_create_from_surface
 id,x,y,w,h,transparent,smooth,preload
+
+background_create_gradient
+w,h,col1,col2,kind
 
 background_create_gradient
 w,h,col1,col2,kind,preload
@@ -180,6 +306,9 @@ ind
 
 background_replace_alpha
 ind,fname,preload
+
+background_replace
+ind,fname,transparent,smooth
 
 background_replace
 ind,fname,transparent,smooth,preload
@@ -389,7 +518,10 @@ d3d_draw_wall
 x1,y1,z1,x2,y2,z2,texid,hrepeat,vrepeat
 
 d3d_end
+none
 
+d3d_light_define_ambient
+col
 
 d3d_light_define_direction
 ind,dx,dy,dz,col
@@ -2008,6 +2140,12 @@ name,size,color,style
 min
 val1,val2,val3,...
 
+motion_set
+dir,speed
+
+motion_add
+dir,speed
+
 mouse_check_button_pressed
 numb
 
@@ -3134,16 +3272,25 @@ sprite_add_from_surface
 ind,id,x,y,w,h
 
 sprite_add
+fname,imgnumb,precise,transparent,smooth,xorig,yorig
+
+sprite_add
 fname,imgnumb,precise,transparent,smooth,preload,xorig,yorig
 
 sprite_assign
 ind,spr
 
 sprite_create_from_screen
-x,y,w,h,precice
+x,y,w,h,precise,transparent,smooth,xorig,yorig
+
+sprite_create_from_screen
+x,y,w,h,precise,transparent,smooth,preload,xorig,yorig
 
 sprite_create_from_surface
-id,x,y,w,h,p
+id,x,y,w,h,precise,transparent,smooth,xorig,yorig
+
+sprite_create_from_surface
+id,x,y,w,h,precise,transparent,smooth,preload,xorig,yorig
 
 sprite_delete
 ind
@@ -3210,6 +3357,9 @@ ind1,ind2
 
 sprite_replace_alpha
 ind,fname,imgnumb,precise,preload,xorig,yorig
+
+sprite_replace
+ind,fname,imgnumb,precise,transparent,smooth,xorig,yorig
 
 sprite_replace
 ind,fname,imgnumb,precise,transparent,smooth,preload,xorig,yorig
@@ -3361,6 +3511,12 @@ dlc_id
 steam_user_installed_dlc
 dlc_id
 
+string_byte_at
+str,index
+
+string_byte_length
+str
+
 string_char_at
 str,index
 
@@ -3403,11 +3559,14 @@ substr,str
 string_repeat
 str,count
 
+string_replace
+str,substr,newstr
+
 string_replace_all
 str,substr,newstr
 
-string_replace
-str,substr,newstr
+string_set_byte_at
+str,pos,byte
 
 string_upper
 str
@@ -3954,3 +4113,54 @@ id
 
 window_view_mouse_set
 id,x,y
+
+winphone_license_trial_version
+none
+
+winphone_tile_back_content
+string
+
+winphone_tile_back_content_wide
+string
+
+winphone_tile_back_image
+img
+
+winphone_tile_back_image_wide
+img
+
+winphone_tile_back_title
+title
+
+winphone_tile_background_color
+color
+
+winphone_tile_count
+num
+
+winphone_tile_cycle_images
+fname0,fname1,...
+
+winphone_tile_front_image
+img
+
+winphone_tile_front_image_small
+img
+
+winphone_tile_front_image_width
+img
+
+winphone_tile_icon_image
+fname
+
+winphone_tile_small_background_image
+img
+
+winphone_tile_small_icon_image
+fname
+
+winphone_tile_title
+title
+
+winphone_tile_wide_content 
+string,index

@@ -12,8 +12,8 @@
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
         <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.mockui"/>
-        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.uilink"/>
         <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.icons.toolbar"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.uilink"/>
         <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker"/>
         <file path="/LibMaker/.classpath"/>
         <file path="/LibMaker/LICENSE"/>
