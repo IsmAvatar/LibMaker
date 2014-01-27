@@ -38,9 +38,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
-import org.lateralgm.joshedit.lexers.DefaultTokenMarker;
+import org.lateralgm.joshedit.DefaultTokenMarker;
 import org.lateralgm.joshedit.lexers.GMLTokenMarker;
-import org.lateralgm.joshedit.Runner.JoshTextPanel;
+import org.lateralgm.joshedit.JoshTextPanel;
 import org.lateralgm.libmaker.Messages;
 import org.lateralgm.libmaker.components.NumberField;
 import org.lateralgm.main.LGM;

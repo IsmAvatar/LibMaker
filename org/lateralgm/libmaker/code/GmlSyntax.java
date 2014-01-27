@@ -11,7 +11,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.lateralgm.joshedit.lexers.DefaultTokenMarker.KeywordSet;
+import org.lateralgm.joshedit.DefaultTokenMarker.KeywordSet;
 
 public class GmlSyntax
 	{
