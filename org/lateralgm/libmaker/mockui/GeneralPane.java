@@ -42,7 +42,7 @@ public class GeneralPane extends GroupPanel implements ActionPanel,ActionListene
 
 	NumberField tActId;
 	JTextField tName, tDesc, tList, tHint, tFunction;
-	JComboBox dKind, dExec;
+	JComboBox<Integer> dKind, dExec;
 	JCheckBox cbHidden, cbAdvanced, cbRegistered;
 	JButton bImageChange, bExecCode;
 	JLabel imagePreview, lExec, lFunc;

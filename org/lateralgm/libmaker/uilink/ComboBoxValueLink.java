@@ -16,9 +16,9 @@ import javax.swing.JComboBox;
 public class ComboBoxValueLink<K extends Enum<K>> extends PropertyLink<K,Object> implements
 		ActionListener
 	{
-	JComboBox combo;
+	JComboBox<?> combo;
 
-	ComboBoxValueLink(JComboBox cb, K k)
+	ComboBoxValueLink(JComboBox<?> cb, K k)
 		{
 		super(k);
 		combo = cb;

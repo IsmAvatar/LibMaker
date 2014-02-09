@@ -33,7 +33,7 @@ public class EnumRenderer extends DefaultListCellRenderer
 		this.prefix = prefix;
 		}
 
-	public Component getListCellRendererComponent(JList list, Object value, int index,
+	public Component getListCellRendererComponent(JList<?> list, Object value, int index,
 			boolean isSelected, boolean cellHasFocus)
 		{
 		if (value instanceof Enum<?>) value = Messages.getString(prefix + ((Enum<?>) value).name());

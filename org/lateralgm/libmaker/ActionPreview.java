@@ -57,7 +57,7 @@ public class ActionPreview extends JInternalFrame implements ActionListener
 	private static final long serialVersionUID = 1L;
 
 	private ButtonGroup applies;
-	private JComboBox appliesObject;
+	private JComboBox<String> appliesObject;
 	private JPanel appliesPanel;
 	private ArgumentComponent argComp[];
 	private JCheckBox relativeBox;
@@ -93,7 +93,7 @@ public class ActionPreview extends JInternalFrame implements ActionListener
 
 		String[] cao = {
 				Messages.getString("ActionPreview.APPLY_OBJ_SELF"),Messages.getString("ActionPreview.APPLY_OBJ_EX") }; //$NON-NLS-1$ //$NON-NLS-2$
-		appliesObject = new JComboBox(cao);
+		appliesObject = new JComboBox<String>(cao);
 		appliesObject.setEnabled(false);
 		appliesObject.setOpaque(false);
 
@@ -314,10 +314,10 @@ public class ActionPreview extends JInternalFrame implements ActionListener
 				case BOOLEAN:
 					final String[] sab = { Messages.getString("ActionPreview.ARG_BOOL_FALSE"), //$NON-NLS-1$
 							Messages.getString("ActionPreview.ARG_BOOL_TRUE") }; //$NON-NLS-1$
-					return new JComboBox(sab);
+					return new JComboBox<String>(sab);
 				case MENU:
 					final String[] sam = ((String) arg.get(PArgument.MENU_OPTS)).split("\\|"); //$NON-NLS-1$
-					return new JComboBox(sam);
+					return new JComboBox<String>(sam);
 				case COLOR:
 					return new ColorSelect(
 							convertGmColor(Integer.parseInt((String) arg.get(PArgument.DEF_VALUE))));
@@ -332,7 +332,7 @@ public class ActionPreview extends JInternalFrame implements ActionListener
 				case TIMELINE:
 					final String[] sar = {
 							Messages.getString("ActionPreview.ARG_RES_NONE"),Messages.getString("ActionPreview.ARG_RES_EX") }; //$NON-NLS-1$ //$NON-NLS-2$
-					return new JComboBox(sar);
+					return new JComboBox<String>(sar);
 				default:
 					return new JTextField((String) arg.get(PArgument.DEF_VALUE));
 				}
@@ -355,10 +355,10 @@ public class ActionPreview extends JInternalFrame implements ActionListener
 				try
 					{
 					int val = Integer.parseInt((String) arg.get(PArgument.DEF_VALUE));
-					JComboBox cb = (JComboBox) editor;
+					JComboBox<?> cb = (JComboBox<?>) editor;
 					if (val < 0 || val >= cb.getItemCount()) val = 0;
 					if (cb.getItemCount() == 0) val = -1;
-					((JComboBox) editor).setSelectedIndex(val);
+					((JComboBox<?>) editor).setSelectedIndex(val);
 					}
 				catch (NumberFormatException e)
 					{

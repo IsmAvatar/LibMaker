@@ -25,7 +25,7 @@ import javax.swing.AbstractListModel;
  * 
  * @author ismavatar
  */
-public class ListListModel<K> extends AbstractListModel
+public class ListListModel<K> extends AbstractListModel<Object>
 	{
 	private static final long serialVersionUID = 1L;
 
