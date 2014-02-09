@@ -41,7 +41,7 @@ public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListe
 	private static final long serialVersionUID = 1L;
 
 	PLFactory<PAction> plf;
-	JComboBox dKind;
+	JComboBox<Integer> dKind;
 	JCheckBox cbQuestion, cbApply, cbRelative;
 	JLabel lArgNum; //so we can toggle its visibility
 	JSpinner sArgNum;
@@ -51,7 +51,7 @@ public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListe
 	class ArgumentInfo implements ActionListener
 		{
 		public JTextField tName, tVal, tOpts;
-		public JComboBox dType;
+		public JComboBox<Integer> dType;
 		PLFactory<PArgument> plf;
 
 		public ArgumentInfo()
@@ -88,7 +88,8 @@ public class InterfacePane extends GroupPanel implements ActionPanel,ChangeListe
 		@Override
 		public void actionPerformed(ActionEvent e)
 			{
-			JComboBox cb = (JComboBox) e.getSource();
+			@SuppressWarnings("unchecked")
+			JComboBox<Integer> cb = (JComboBox<Integer>) e.getSource();
 			boolean b = cb.isVisible() && cb.getSelectedItem() == Argument.Kind.MENU;
 			tOpts.setVisible(b);
 			updateUI(); //inform parent panel that a component needs drawing

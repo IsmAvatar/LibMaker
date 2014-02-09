@@ -72,7 +72,7 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 	InterfacePane iface;
 	//The list is pulled up because we need it to control the other panels
 	ListListModel<Action> mActions;
-	JList lActions;
+	JList<Object> lActions;
 
 	public MockUI()
 		{
@@ -112,7 +112,7 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 			cbAdvanced = new JCheckBox(Messages.getString("MockUI.ADVANCED")); //$NON-NLS-1$
 			plf.make(cbAdvanced,PLibrary.ADVANCED);
 
-			lActions = new JList(mActions = new ListListModel<Action>());
+			lActions = new JList<Object>(mActions = new ListListModel<Action>());
 			lActions.setCellRenderer(new ActionListCellRenderer());
 			//Prototype only used for size calculation, so it doesn't need translating
 			lActions.setPrototypeCellValue("Sample Action Cell"); //$NON-NLS-1$
@@ -292,7 +292,7 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 		{
 		private static final long serialVersionUID = 1L;
 
-		public Component getListCellRendererComponent(JList list, Object value, int index,
+		public Component getListCellRendererComponent(JList<?> list, Object value, int index,
 				boolean isSelected, boolean cellHasFocus)
 			{
 			//Handle non-actions the default way
@@ -376,6 +376,8 @@ public class MockUI extends JSplitPane implements ListSelectionListener,Property
 				break;
 			case KIND:
 				iface.setVisible(e.map.get(PAction.KIND) == Action.Kind.NORMAL);
+				break;
+			default:
 				break;
 			}
 		}

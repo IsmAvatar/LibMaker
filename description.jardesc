@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="WINDOWS-1252" standalone="no"?>
 <jardesc>
     <jar path="LibMaker/libmaker.jar"/>
-    <options buildIfNeeded="true" compress="true" descriptionLocation="/LibMaker/description.jardesc" exportErrors="false" exportWarnings="false" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/LibMaker/description.jardesc" exportErrors="false" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
     <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
     <selectedProjects/>
     <manifest generateManifest="false" mainClassHandleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker{LibMaker.java[LibMaker" manifestLocation="/LibMaker/META-INF/MANIFEST.MF" manifestVersion="1.0" reuseManifest="true" saveManifest="true" usesManifest="true">
@@ -11,25 +11,22 @@
         </sealing>
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
-        <javaElement handleIdentifier="=JoshEdit/&lt;org.lateralgm.joshedit"/>
-        <javaElement handleIdentifier="=JoshEdit/&lt;org.lateralgm.joshedit.icons"/>
-        <javaElement handleIdentifier="=JoshEdit/&lt;org.lateralgm.joshedit.icons.actions"/>
-        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker"/>
-        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.code"/>
         <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.mockui"/>
-        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.uilink"/>
-        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.backend"/>
-        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.components"/>
-        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.file"/>
-        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.icons"/>
-        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.icons.menu"/>
         <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.icons.toolbar"/>
-        <folder path="/LibMaker/META-INF"/>
-        <file path="/LibMaker/LICENSE"/>
-        <file path="/LibMaker/COPYING"/>
-        <file path="/LibMaker/README"/>
-        <file path="/LibMaker/description.jardesc"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.uilink"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker"/>
         <file path="/LibMaker/.classpath"/>
+        <file path="/LibMaker/LICENSE"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.backend"/>
+        <file path="/LibMaker/COPYING"/>
+        <folder path="/LibMaker/META-INF"/>
         <file path="/LibMaker/.project"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.code"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.components"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.icons.menu"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.icons"/>
+        <javaElement handleIdentifier="=LibMaker/&lt;org.lateralgm.libmaker.file"/>
+        <file path="/LibMaker/description.jardesc"/>
+        <file path="/LibMaker/README"/>
     </selectedElements>
 </jardesc>
